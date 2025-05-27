@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Servicios de impresión 3D y diseño personalizado">
+    <title>Servicios - Impretam 3D</title>
+    <link rel="stylesheet" href="css/whatsapp.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="css/whatsapp.css"></noscript>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .header { background: #0a2a66; color: #fff; padding: 20px; display: flex; align-items: center; }
+        .logo { font-size: 2.5em; font-weight: bold; margin-right: 20px; }
+        .nav { margin-left: auto; }
+        .nav a { color: #fff; text-decoration: none; margin: 0 10px; font-size: 1.1em; }
+        .footer { background: #0a2a66; color: #fff; text-align: center; padding: 15px 0; position: fixed; width: 100%; bottom: 0; }
+        
+        .services-hero {
+            height: 60vh;            background: linear-gradient(rgba(10, 42, 102, 0.7), rgba(10, 42, 102, 0.7)),
+                        url('images/hero-bg.jpg') center/cover;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            margin-top: -80px;
+        }
+
+        .services-hero-content {
+            max-width: 800px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .services-hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .services-hero p {
+            font-size: 1.3em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Resto de los estilos */
+        .services-content {
+            background: #f7f7f7;
+            padding: 60px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .services-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .service-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 25px;
+            width: 300px;
+            text-align: center;
+        }
+        .service-card h3 {
+            color: #0a2a66;
+            margin-bottom: 15px;
+        }
+        .service-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .service-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #1a7f37;
+        }
+        .features-section {
+            background: white;
+            padding: 40px 0;
+            margin-top: 40px;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+        }
+        .feature-icon {
+            font-size: 1.5em;
+            color: #1a7f37;
+        }
+        .testimonials {
+            padding: 40px 0;
+            background: #f0f4f8;
+        }
+        .testimonial-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 20px;
+            max-width: 400px;
+        }
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        .testimonial-author {
+            font-weight: bold;
+            color: #0a2a66;
+        }        .cta-section {
+            text-align: center;
+            padding: 80px 20px;
+            background: #f8f9fa;
+            position: relative;
+        }
+        .cta-section h2 {
+            color: #0a2a66;
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .cta-section p {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 18px 40px;
+            background: #1a7f37;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(26, 127, 55, 0.2);
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 127, 55, 0.3);
+            background: #1e9341;
+        }
+
+        /* WhatsApp Button Styles */
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        .whatsapp-button img {
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span class="logo">Impretam 3D</span>        <nav class="nav">
+            <a href="index.html">Inicio</a>
+            <a href="servicios.html">Servicios</a>
+            <a href="contacto.html">Contacto</a>
+        </nav>
+    </div>
+    
+    <section class="services-hero">
+        <div class="services-hero-content">
+            <h1>Nuestros Servicios</h1>
+            <p>Soluciones personalizadas de impresión 3D y diseño para hacer realidad tus proyectos. Combinamos tecnología de vanguardia con creatividad para ofrecerte resultados excepcionales.</p>
+        </div>
+    </section>
+
+    <div class="services-content">
+        <div class="services-container">
+            <div class="service-card">
+                <div class="service-icon">🎨</div>
+                <h3>Diseño en 3D</h3>
+                <p>Creamos modelos 3D personalizados según tus especificaciones. Desde piezas técnicas hasta diseños artísticos, convertimos tus ideas en realidad digital.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🖨️</div>
+                <h3>Impresiones 3D</h3>
+                <p>Materializamos tus diseños con tecnología de impresión 3D de alta calidad. Ofrecemos diversos materiales y acabados para satisfacer tus necesidades.</p>
+            </div>
+            <div class="service-card">                <div class="service-icon">💡</div>
+                <h3>Consultoría de Proyectos</h3>
+                <p>Te asesoramos en tus proyectos escolares o personales, desde la idea inicial hasta la impresión final. Te ayudamos a elegir los mejores materiales y métodos para tu presupuesto.</p>
+            </div>
+        </div>
+
+        <!-- Características Adicionales -->
+        <section class="features-section">
+            <h2 style="text-align: center">¿Por qué elegirnos?</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    <div>
+                        <h4>Entrega Rápida</h4>
+                        <p>Optimizamos nuestros procesos para entregar en tiempo récord.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💎</span>
+                    <div>
+                        <h4>Alta Calidad</h4>
+                        <p>Utilizamos tecnología de última generación para resultados perfectos.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💰</span>
+                    <div>
+                        <h4>Precios Competitivos</h4>
+                        <p>Ofrecemos la mejor relación calidad-precio del mercado.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🤝</span>
+                    <div>
+                        <h4>Soporte Personalizado</h4>
+                        <p>Te acompañamos en cada paso del proceso.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonios -->
+        <section class="testimonials">
+            <h2 style="text-align: center">Lo que dicen nuestros clientes</h2>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Excelente servicio y resultados impecables. El equipo realmente entiende lo que necesitas y te asesora de la mejor manera."</p>
+                    <div class="testimonial-author">- María González, Arquitecta</div>
+                </div>            <div class="testimonial-card">
+                    <p class="testimonial-text">"Me ayudaron con mi proyecto escolar de impresión 3D. El asesoramiento fue excelente y el resultado superó mis expectativas."</p>
+                    <div class="testimonial-author">- Daniel Torres, Estudiante</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Llamada a la acción -->
+        <section class="cta-section">
+            <h2>¿Listo para dar vida a tus ideas?</h2>
+            <p>Contáctanos hoy mismo y comencemos a trabajar en tu proyecto</p>
+            <a href="contacto.html" class="cta-button">¡Comencemos!</a>
+        </section>
+
+        <!-- WhatsApp Floating Button -->
+        <a href="#" class="whatsapp-button" onclick="createWhatsAppPopup(); return false;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+        </a>    <div class="footer">
+        &copy; 2025 Impretam 3D | <a href="terms.html" style="color: #fff; text-decoration: none;">Términos y Condiciones</a>
+    </div>
+    <script src="js/whatsapp.min.js" async></script>
+    <script>
+        // Cargar el fondo guardado al cargar la página
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedBg = localStorage.getItem('serviciosBackground');
+            if (savedBg) {
+                const heroSection = document.querySelector('.services-hero');
+                heroSection.style.background = `linear-gradient(rgba(10, 42, 102, 0.7), rgba(10, 42, 102, 0.7)), url('${savedBg}') center/cover`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contacta con Impretam 3D para tus proyectos de impresión 3D">
+    <title>Contacto - Impretam 3D</title>
+    <link rel="stylesheet" href="css/whatsapp.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="css/whatsapp.css"></noscript>
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="preconnect" href="https://upload.wikimedia.org">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .header { background: #0a2a66; color: #fff; padding: 20px; display: flex; align-items: center; }
+        .logo { font-size: 2.5em; font-weight: bold; margin-right: 20px; }
+        .nav { margin-left: auto; }
+        .nav a { color: #fff; text-decoration: none; margin: 0 10px; font-size: 1.1em; }
+        .footer { background: #0a2a66; color: #fff; text-align: center; padding: 15px 0; position: fixed; width: 100%; bottom: 0; }
+
+        .contact-hero {
+            height: 40vh;
+            background: linear-gradient(rgba(10, 42, 102, 0.9), rgba(10, 42, 102, 0.9)),
+                        url('https://images.unsplash.com/photo-1557838923-2985c318be48?auto=format&fit=crop&q=60&w=1200') center/cover;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .contact-hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            animation: slideDown 1s ease-out;
+        }
+
+        .contact-hero p {
+            font-size: 1.2em;
+            max-width: 600px;
+            animation: fadeIn 1s ease-out 0.5s forwards;
+            opacity: 0;
+        }
+
+        .contact-container {
+            display: flex;
+            max-width: 1200px;
+            margin: -50px auto 100px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-form {
+            flex: 1;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: slideUp 1s ease-out;
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 15px;
+            margin-left: 30px;
+            width: 300px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        input, textarea {
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #1a7f37;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        button {
+            background: #1a7f37;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button:hover {
+            background: #1e9341;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26,127,55,0.2);
+        }
+
+        .info-item {
+            margin-bottom: 30px;
+        }
+
+        .info-item h3 {
+            color: #0a2a66;
+            margin-bottom: 10px;
+        }        .info-item p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .schedule {
+            background: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .schedule-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+        
+        .days {
+            color: #0a2a66;
+            font-weight: bold;
+        }
+        
+        .hours {
+            color: #1a7f37;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }        /* Success message styling */
+        .success-message {
+            background: #1a7f37;
+            color: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .error-message {
+            background: #dc3545;
+            color: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .fallback-button {
+            background: white !important;
+            color: #dc3545 !important;
+            margin-top: 10px;
+            border: 2px solid white !important;
+        }
+        .fallback-button:hover {
+            background: #f8f9fa !important;
+            transform: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span class="logo">Impretam 3D</span>
+        <nav class="nav">
+            <a href="index.html">Inicio</a>
+            <a href="servicios.html">Servicios</a>
+            <a href="contacto.html">Contacto</a>
+        </nav>
+    </div>
+
+    <section class="contact-hero">
+        <div>
+            <h1>Contáctanos</h1>
+            <p>Estamos aquí para ayudarte a hacer realidad tus proyectos. ¿Tienes alguna pregunta? ¡Escríbenos!</p>
+        </div>
+    </section>
+
+    <div class="contact-container">
+        <div class="contact-form">
+            <form id="contactForm" action="https://formsubmit.co/ajax/joegarcia2392@gmail.com" method="POST">
+                <input type="text" name="name" placeholder="Tu nombre" required>
+                <input type="tel" name="phone" pattern="[0-9]{10}" title="Ingresa 10 dígitos" placeholder="Tu teléfono" required>
+                <input type="email" name="email" placeholder="Tu correo electrónico" required>
+                <textarea name="message" placeholder="¿En qué podemos ayudarte?" required></textarea>
+                <button type="submit" id="submitBtn">Enviar mensaje</button>
+            </form>
+            
+            <div id="successMessage" class="success-message" style="display:none;">
+                ¡Mensaje enviado correctamente! Nos pondremos en contacto contigo pronto.
+            </div>
+
+            <script>
+                const form = document.getElementById('contactForm');
+                const submitBtn = document.getElementById('submitBtn');
+                const successMsg = document.getElementById('successMessage');
+
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    // Cambiar estado del botón
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Enviando...';
+
+                    try {
+                        const formData = new FormData(this);
+                        const data = Object.fromEntries(formData);
+
+                        const response = await fetch('https://formsubmit.co/ajax/joegarcia2392@gmail.com', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        });
+
+                        if (response.ok) {
+                            // Mostrar mensaje de éxito
+                            successMsg.style.display = 'block';
+                            form.reset();
+                            
+                            // Scroll suave al mensaje
+                            successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            
+                            // Ocultar mensaje después de 5 segundos
+                            setTimeout(() => {
+                                successMsg.style.display = 'none';
+                            }, 5000);
+                        } else {
+                            throw new Error('Error en el envío');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Hubo un error al enviar el mensaje. Por favor intenta de nuevo.');
+                    } finally {
+                        // Restaurar estado del botón
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Enviar mensaje';
+                    }
+                });
+            </script>
+        </div>
+        <div class="contact-info">            
+            <div class="info-item">
+                <h3>Horario de Atención</h3>
+                <div class="schedule">
+                    <div class="schedule-item">
+                        <span class="days">Lunes a Viernes</span>
+                        <span class="hours">9:00 AM - 6:00 PM</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="days">Sábados</span>
+                        <span class="hours">9:00 AM - 2:00 PM</span>
+                    </div>
+                </div>
+            </div>
+              <div class="info-item">
+                <h3>Respuesta Rápida</h3>
+                <p>Te respondemos en menos de 24 horas para comenzar con tu proyecto.</p>
+            </div>
+
+            <div class="info-item">
+                <h3>Envíos</h3>
+                <div class="schedule">
+                    <div class="schedule-item">
+                        <span class="days">Envíos a toda la República</span>
+                        <span class="hours">Servicio de paquetería seguro</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    <div class="footer">
+        <div style="margin-bottom: 10px;">            <a href="terms.html" style="color: white; text-decoration: none; margin: 0 10px;">Términos y Condiciones</a>
+        </div>
+        &copy; 2025 Impretam 3D
+    </div>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="#" class="whatsapp-button" onclick="createWhatsAppPopup(); return false;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </a>    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        // Inicializar EmailJS
+        (function() {
+            emailjs.init("yWoGeyoWPqTc_2pZs");
+        })();
+
+        document.getElementById('contactForm').onsubmit = function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !phone || !email || !message) {
+                alert('Por favor completa todos los campos.');
+                return;
+            }
+
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+
+            // Mostrar indicador de carga
+            const submitButton = document.querySelector('#contactForm button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.innerHTML = 'Enviando...';
+            submitButton.disabled = true;            emailjs.send('mfP2Pl3u7iaAniy1BG47j', 'BG47j', {
+                to_email: 'joegarcia2392@gmail.com',
+                from_name: name,
+                email: email,
+                phone: phone,
+                message: message
+            })
+            .then(function() {
+                successMsg.style.display = 'block';
+                document.getElementById('contactForm').reset();
+                successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            })
+            .catch(function(error) {
+                console.error('EmailJS error:', error);
+                errorMsg.style.display = 'block';
+                errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            })
+            .finally(function() {
+                // Restaurar el botón
+                submitButton.innerHTML = originalButtonText;
+                submitButton.disabled = false;
+            });
+        };
+    </script>
+<!--
+INSTRUCCIONES:
+- Regístrate en https://www.emailjs.com/
+- Crea un servicio (serviceID) y una plantilla (templateID) que envíe a joegarcia2392@gmail.com
+- Reemplaza 'TU_USER_ID_EMAILJS', 'TU_SERVICE_ID' y 'TU_TEMPLATE_ID' por los valores de tu cuenta EmailJS.
+- Puedes personalizar el template para que el correo incluya nombre, teléfono, correo y mensaje.
+-->
+</body>
+</html>

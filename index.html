@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Impresión 3D profesional y diseño personalizado para tus proyectos">
+    <title>Impretam 3D</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .header { background: #0a2a66; color: #fff; padding: 20px; display: flex; align-items: center; }
+        .logo { font-size: 2.5em; font-weight: bold; margin-right: 20px; }
+        .nav { margin-left: auto; }
+        .nav a { color: #fff; text-decoration: none; margin: 0 10px; font-size: 1.1em; }
+        .footer { background: #0a2a66; color: #fff; text-align: center; padding: 15px 0; position: fixed; width: 100%; bottom: 0; }
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(10, 42, 102, 0.7), rgba(10, 42, 102, 0.7)),
+                        url('https://images.unsplash.com/photo-1551103782-8ab07afd45c1?auto=format&fit=crop&q=60&w=1200') center/cover;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: -80px;
+            transition: background 0.3s ease;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .hero h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .cta-button {
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .primary-button {
+            background: #1a7f37;
+            color: white;
+        }
+
+        .secondary-button {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .features {
+            padding: 80px 20px;
+            background: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 30px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            color: #1a7f37;
+            margin-bottom: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>    <link rel="stylesheet" href="css/whatsapp.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="css/whatsapp.css"></noscript>
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="preconnect" href="https://upload.wikimedia.org">
+</head>
+<body>
+    <div class="header">
+        <span class="logo">Impretam 3D</span>
+        <nav class="nav">
+            <a href="index.html">Inicio</a>
+            <a href="servicios.html">Servicios</a>
+            <a href="contacto.html">Contacto</a>
+        </nav>
+    </div>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Impresión 3D Creativa</h1>
+            <p>Transformamos tus ideas en realidad con tecnología de vanguardia y diseño personalizado. Desde proyectos escolares hasta prototipos innovadores, estamos aquí para hacer tus sueños realidad.</p>
+            <div class="cta-buttons">
+                <a href="servicios.html" class="cta-button primary-button">Explorar Servicios</a>
+                <a href="contacto.html" class="cta-button secondary-button">Contactar</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Diseño Creativo</h3>
+                <p>Convertimos tus ideas en modelos 3D profesionales con atención al detalle.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Impresión Rápida</h3>
+                <p>Utilizamos tecnología de última generación para entregas eficientes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3>Asesoría Experta</h3>
+                <p>Te guiamos en cada paso del proceso para obtener los mejores resultados.</p>
+            </div>
+        </div>
+    </section>    <div class="footer">
+        &copy; 2025 Impretam 3D | <a href="terms.html" style="color: #fff; text-decoration: none;">Términos y Condiciones</a>
+    </div>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="#" class="whatsapp-button" onclick="createWhatsAppPopup(); return false;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </a>    <script src="js/whatsapp.min.js" async></script>
+    <script>
+        // Cargar y aplicar imagen de fondo desde localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedBg = localStorage.getItem('indexBackground');
+            if (savedBg) {
+                const hero = document.querySelector('.hero');
+                hero.style.background = `linear-gradient(rgba(10, 42, 102, 0.7), rgba(10, 42, 102, 0.7)), url(${savedBg}) center/cover`;
+            }
+        });
+    </script>
+</body>
+</html>

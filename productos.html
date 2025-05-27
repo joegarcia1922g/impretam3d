@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Productos de impresión 3D personalizados">
+    <title>Productos - Impretam 3D</title>
+    <link rel="stylesheet" href="css/whatsapp.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="css/whatsapp.css"></noscript>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .header { background: #0a2a66; color: #fff; padding: 20px; display: flex; align-items: center; }
+        .logo { font-size: 2.5em; font-weight: bold; margin-right: 20px; }
+        .nav { margin-left: auto; }
+        .nav a { color: #fff; text-decoration: none; margin: 0 10px; font-size: 1.1em; }
+        .footer { background: #0a2a66; color: #fff; text-align: center; padding: 15px 0; position: fixed; width: 100%; bottom: 0; }
+        h2 { color: #0a2a66; }
+        .product-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+            margin: 0 auto 30px;
+        }
+        .product-card img {
+            width: 100%;
+            border-radius: 6px;
+        }
+        .product-card .product-title {
+            font-weight: bold;
+            margin: 10px 0 5px;
+        }
+        .product-card .product-price {
+            color: #1a7f37;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span class="logo">Impretam 3D</span>
+        <nav class="nav">
+            <a href="index.html">Inicio</a>
+            <a href="productos.html">Productos</a>
+            <a href="servicios.html">Servicios</a>
+            <a href="contacto.html">Contacto</a>
+        </nav>
+    </div>
+    <section style="padding: 40px 0; background: #f7f7f7; min-height:80vh;">
+        <div style="max-width: 900px; margin: auto;">
+            <h2>Productos Destacados</h2>
+            <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;">
+                <div class="product-card">
+                    <img src='https://via.placeholder.com/120x120?text=Prod1' alt='Prod1' loading="lazy">
+                    <div class="product-title">Producto 1</div>
+                    <div class="product-price">$100.00</div>
+                </div>
+                <div class="product-card">
+                    <img src='https://via.placeholder.com/120x120?text=Prod2' alt='Prod2'>
+                    <div class="product-title">Producto 2</div>
+                    <div class="product-price">$150.00</div>
+                </div>
+                <div class="product-card">
+                    <img src='https://via.placeholder.com/120x120?text=Prod3' alt='Prod3'>
+                    <div class="product-title">Producto 3</div>
+                    <div class="product-price">$200.00</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- WhatsApp Floating Button -->
+    <a href="#" class="whatsapp-button" onclick="createWhatsAppPopup(); return false;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </a>
+
+    <script src="js/config.js"></script>
+    <script src="js/redirect.js"></script>
+    <script src="js/whatsapp.min.js" async></script>
+    <div class="footer">
+        &copy; 2025 Impretam 3D | <a href="terms.html" style="color: #fff; text-decoration: none;">Términos y Condiciones</a>
+    </div>
+</body>
+</html>

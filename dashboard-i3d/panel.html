@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Impretam 3D</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a2a66;
+            --primary-light: #0d3380;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --danger: #dc3545;
+            --success: #198754;
+            --radius: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --header-height: 64px;
+            --sidebar-width: 280px;
+            --content-max-width: 1200px;
+            --transition-speed: 0.2s;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--gray-100);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* Layout */
+        .app-container {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            position: fixed;
+            width: var(--sidebar-width);
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-md);
+            z-index: 10;
+            padding: 24px 16px;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gray-400) transparent;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--gray-400);
+            border-radius: 3px;
+        }
+
+        .sidebar-logo {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0 12px;
+            margin: 0 0 8px;
+        }
+
+        .nav-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            color: #4a5568;
+            text-decoration: none;
+            border-radius: var(--radius);
+            margin-bottom: 4px;
+            transition: all var(--transition-speed);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .nav-item:hover {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-item .material-icons {
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        /* Main Content */
+        main {
+            grid-column: 2;
+            padding: 32px;
+            max-width: var(--content-max-width);
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-speed);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-title {
+            color: var(--primary);
+            margin: 0 0 24px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: all var(--transition-speed);
+            box-sizing: border-box;
+        }
+
+        .form-control:hover {
+            border-color: var(--gray-400);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(10, 42, 102, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all var(--transition-speed);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #bb2d3b;
+            transform: translateY(-1px);
+        }
+
+        /* Image Upload */
+        .image-upload {
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius);
+            padding: 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .image-upload:hover {
+            border-color: var(--primary);
+            background: rgba(10, 42, 102, 0.02);
+        }
+
+        .image-upload .material-icons {
+            font-size: 48px;
+            color: var(--gray-500);
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            color: var(--gray-500);
+            margin: 0;
+        }
+
+        .preview-container {
+            margin-top: 24px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .image-preview {
+            max-width: 300px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity var(--transition-speed);
+        }
+
+        .preview-container:hover .preview-overlay {
+            opacity: 1;
+        }
+
+        .remove-image {
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            color: var(--danger);
+        }
+
+        .remove-image:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Service Items */
+        .service-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .service-item {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-speed);
+        }
+
+        .service-item:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 16px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideDown 0.3s ease;
+        }
+
+        .alert-success {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        /* Preview Dialog */
+        .preview-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-speed);
+            backdrop-filter: blur(4px);
+        }
+
+        .preview-dialog.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .preview-content {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: var(--shadow-md);
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all var(--transition-speed);
+        }
+
+        .preview-dialog.active .preview-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .preview-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .preview-title {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .preview-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--gray-500);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all var(--transition-speed);
+            line-height: 1;
+        }
+
+        .preview-close:hover {
+            background: var(--gray-100);
+            color: var(--danger);
+        }
+
+        .preview-body {
+            margin-bottom: 24px;
+        }
+
+        .preview-image-container {
+            text-align: center;
+            margin-bottom: 20px;
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+
+        #previewImage {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            transition: opacity var(--transition-speed);
+        }
+
+        .preview-details {
+            background: var(--gray-100);
+            padding: 16px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+        }
+
+        .preview-detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .preview-detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .preview-detail-label {
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .preview-success {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--success);
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            animation: fadeInScale 0.3s ease;
+        }
+
+        @keyframes fadeInScale {
+            from { 
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to { 
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 100%;
+            }
+
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                transition: left var(--transition-speed);
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            main {
+                grid-column: 1;
+                padding: 16px;
+            }
+
+            .service-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .preview-content {
+                width: 95%;
+                padding: 16px;
+            }
+            
+            .preview-image-container {
+                padding: 12px;
+            }
+            
+            .preview-actions {
+                flex-direction: column;
+            }
+            
+            .preview-actions .btn {
+                width: 100%;
+            }
+        }
+
+        /* Prefers Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="panel.html" class="sidebar-logo">Impretam 3D</a>
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-section-title">Gestión</div>
+                    <ul class="nav-items">
+                        <li>
+                            <a href="#imagenes" class="nav-item active" data-section="imagenes">
+                                <span class="material-icons">image</span>
+                                Imágenes
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#servicios" class="nav-item" data-section="servicios">
+                                <span class="material-icons">build</span>
+                                Servicios
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Configuración</div>
+                    <ul class="nav-items">
+                        <li>
+                            <a href="#ajustes" class="nav-item" data-section="ajustes">
+                                <span class="material-icons">settings</span>
+                                Ajustes
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-item" onclick="logout(); return false;">
+                                <span class="material-icons">logout</span>
+                                Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <small>Sesión: <span id="userRoleLabel"></span></small>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Panel de Control</h1>
+            </div>
+            <div class="content-grid">
+                <section id="imagenes" class="content-section active">
+                    <div class="card">
+                        <h3 class="section-title">Fondos de Página</h3>
+                        <div class="background-sections">
+                            <div class="section-card">
+                                <h4>Página Principal</h4>
+                                <div class="current-background">
+                                    <div class="background-preview" id="currentIndexBg">
+                                        <!-- Current background will be shown here -->
+                                    </div>
+                                </div>
+                                <div class="image-upload" onclick="document.getElementById('indexBgInput').click()">
+                                    <input type="file" 
+                                           id="indexBgInput" 
+                                           accept="image/*" 
+                                           style="display: none;" 
+                                           onchange="previewBackground(event, 'index')">
+                                    <div class="upload-placeholder">
+                                        <i class="material-icons">cloud_upload</i>
+                                        <p>Cambiar Imagen de Fondo</p>
+                                        <span class="upload-hint">PNG o JPG hasta 5MB</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="section-card">
+                                <h4>Página de Servicios</h4>
+                                <div class="current-background">
+                                    <div class="background-preview" id="currentServiciosBg">
+                                        <!-- Current background will be shown here -->
+                                    </div>
+                                </div>
+                                <div class="image-upload" onclick="document.getElementById('serviciosBgInput').click()">
+                                    <input type="file" 
+                                           id="serviciosBgInput" 
+                                           accept="image/*" 
+                                           style="display: none;" 
+                                           onchange="previewBackground(event, 'servicios')">
+                                    <div class="upload-placeholder">
+                                        <i class="material-icons">cloud_upload</i>
+                                        <p>Cambiar Imagen de Fondo</p>
+                                        <span class="upload-hint">PNG o JPG hasta 5MB</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-card">
+                                <h4>Página de Términos</h4>
+                                <div class="current-background">
+                                    <div class="background-preview" id="currentTermsBg">
+                                        <!-- Current background will be shown here -->
+                                    </div>
+                                </div>
+                                <div class="image-upload" onclick="document.getElementById('termsBgInput').click()">
+                                    <input type="file" 
+                                           id="termsBgInput" 
+                                           accept="image/*" 
+                                           style="display: none;" 
+                                           onchange="previewBackground(event, 'terms')">
+                                    <div class="upload-placeholder">
+                                        <i class="material-icons">cloud_upload</i>
+                                        <p>Cambiar Imagen de Fondo</p>
+                                        <span class="upload-hint">PNG o JPG hasta 5MB</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-card">
+                                <h4>Página de Contacto</h4>
+                                <div class="current-background">
+                                    <div class="background-preview" id="currentContactoBg">
+                                        <!-- Current background will be shown here -->
+                                    </div>
+                                </div>
+                                <div class="image-upload" onclick="document.getElementById('contactoBgInput').click()">
+                                    <input type="file" 
+                                           id="contactoBgInput" 
+                                           accept="image/*" 
+                                           style="display: none;" 
+                                           onchange="previewBackground(event, 'contacto')">
+                                    <div class="upload-placeholder">
+                                        <i class="material-icons">cloud_upload</i>
+                                        <p>Cambiar Imagen de Fondo</p>
+                                        <span class="upload-hint">PNG o JPG hasta 5MB</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="servicios" class="content-section" style="display: none;">
+                    <div class="card">
+                        <h3 class="section-title">Editar Servicios</h3>
+                        <div id="editableServices" class="service-list"></div>
+                        <button class="btn btn-primary" onclick="addEditableService()">
+                            <span class="material-icons">add</span>
+                            Nuevo Servicio
+                        </button>
+                        <button class="btn btn-success" id="btnApplyServices" style="margin-left:16px;margin-top:16px;">
+                            <span class="material-icons">check_circle</span>
+                            Aplicar cambios
+                        </button>
+                    </div>
+                </section>
+                <section id="ajustes" class="content-section" style="display: none;">
+                    <div class="card">
+                        <h3 class="section-title">Ajustes</h3>
+                        <form id="passwordForm" onsubmit="changePassword(event)">
+                            <div class="form-group">
+                                <label class="form-label">Contraseña Actual</label>
+                                <input type="password" class="form-control" id="currentPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Nueva Contraseña</label>
+                                <input type="password" class="form-control" id="newPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Confirmar Nueva Contraseña</label>
+                                <input type="password" class="form-control" id="confirmPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <span class="material-icons">lock</span>
+                                Cambiar Contraseña
+                            </button>
+                        </form>
+                        <button class="btn btn-primary" onclick="backupData()" style="margin-top:20px;">
+                            <span class="material-icons">backup</span>
+                            Crear Copia de Seguridad
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Preview Modal for Confirming Changes -->
+    <div id="previewDialog" class="preview-dialog">
+        <div class="preview-content">
+            <div class="preview-header">
+                <h3 class="preview-title">Vista Previa</h3>
+                <button class="preview-close" onclick="closePreview()" aria-label="Cerrar">&times;</button>
+            </div>
+            <div class="preview-body">
+                <div class="preview-image-container">
+                    <img id="previewImage" alt="Vista previa de imagen">
+                </div>
+                <div class="preview-details">
+                    <div class="preview-detail-item">
+                        <span class="preview-detail-label">Nombre:</span>
+                        <span id="previewName"></span>
+                    </div>
+                    <div class="preview-detail-item">
+                        <span class="preview-detail-label">Tamaño:</span>
+                        <span id="previewSize"></span>
+                    </div>
+                    <div class="preview-detail-item">
+                        <span class="preview-detail-label">Tipo:</span>
+                        <span id="previewType"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="preview-actions">
+                <button class="btn btn-primary" id="btnApplyPreview" onclick="previewCallback()">
+                    <span class="material-icons">check</span>
+                    Aplicar Cambios
+                </button>
+                <button class="btn btn-danger" onclick="closePreview()">
+                    <span class="material-icons">close</span>
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación para eliminar servicio -->
+<div id="deleteServiceModal" class="preview-dialog" style="z-index:2000;">
+  <div class="preview-content" style="max-width:340px;text-align:center;">
+    <div class="preview-header">
+      <h3 class="preview-title">¿Eliminar servicio?</h3>
+      <button class="preview-close" onclick="closeDeleteServiceModal()" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="preview-body">
+      <p>¿Estás seguro de que deseas eliminar este servicio?</p>
+    </div>
+    <div class="preview-actions">
+      <button class="btn btn-danger" id="btnConfirmDeleteService">Eliminar</button>
+      <button class="btn btn-primary" onclick="closeDeleteServiceModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+    <script src="../js/admin-config.js"></script>
+    <script>
+    // --- Session & Role Management ---
+    function getUserRole() {
+        return localStorage.getItem('userRole') || 'admin';
+    }
+    document.getElementById('userRoleLabel').textContent = getUserRole() === 'superadmin' ? 'Superadmin' : 'Admin';
+
+    if (!localStorage.getItem('adminLoggedIn')) {
+        window.location.href = 'login.html';
+    }
+
+    // --- Navigation ---
+    document.querySelectorAll('.nav-item').forEach(item => {
+        if (item.getAttribute('data-section')) {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sectionId = item.getAttribute('data-section');
+                switchSection(sectionId);
+            });
+        }
+    });
+    function switchSection(sectionId) {
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.toggle('active', item.getAttribute('data-section') === sectionId);
+        });
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = section.id === sectionId ? 'block' : 'none';
+        });
+    }
+
+    // --- Preview Modal Logic ---
+    let previewCallback = null;
+    let pendingBgChange = null; // Para almacenar el cambio de fondo temporal
+
+    function showPreviewDialog(html, callback) {
+        const dialog = document.getElementById('previewDialog');
+        const previewBody = dialog.querySelector('.preview-body');
+        
+        // Store callback
+        previewCallback = () => {
+            try {
+                if (typeof callback === 'function') {
+                    callback();
+                    showAlert('success', '¡Cambios aplicados correctamente!');
+                    closePreview();
+                }
+            } catch (error) {
+                console.error('Error al aplicar cambios:', error);
+                showAlert('error', 'Error al aplicar los cambios');
+            }
+        };
+        
+        // Update content
+        previewBody.innerHTML = html;
+        
+        // Show dialog
+        dialog.classList.add('active');
+        
+        // Focus apply button
+        const applyButton = dialog.querySelector('#btnApplyPreview');
+        if (applyButton) {
+            setTimeout(() => applyButton.focus(), 100);
+        }
+        
+        // Add escape key handler
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') closePreview();
+        };
+        document.addEventListener('keydown', handleEscape);
+        
+        // Clean up when dialog closes
+        dialog.addEventListener('transitionend', () => {
+            if (!dialog.classList.contains('active')) {
+                document.removeEventListener('keydown', handleEscape);
+            }
+        }, { once: true });
+    }
+    function closePreview() {
+        const dialog = document.getElementById('previewDialog');
+        dialog.classList.remove('active');
+        previewCallback = null;
+        pendingBgChange = null;
+    }
+    function applyPreviewChanges() {
+        if (typeof previewCallback === 'function') {
+            previewCallback();
+            showAlert('success', '¡Cambios aplicados correctamente!');
+        }
+        closePreview();
+    }
+
+    function showAlert(type, message) {
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type}`;
+        alert.innerHTML = `
+            <span class="material-icons">${type === 'success' ? 'check_circle' : 'error'}</span>
+            ${message}
+        `;
+        document.querySelector('.main-content').insertBefore(alert, document.querySelector('.main-content').firstChild);
+        setTimeout(() => alert.remove(), 3000);
+    }
+
+    // --- Image Upload with Preview ---
+    function showImagePreview(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const html = `
+                <div style='text-align:center;'>
+                    <img src='${e.target.result}' style='max-width:200px; border-radius:8px; margin-bottom:10px;'>
+                    <div><b>Nombre:</b> ${file.name}</div>
+                    <div><b>Tamaño:</b> ${(file.size/1024).toFixed(1)} KB</div>
+                    <div><b>Tipo:</b> ${file.type}</div>
+                </div>
+            `;
+            showPreviewDialog(html, function() {
+                // Aquí se aplicaría el cambio real (guardar imagen, etc)
+                // Por ahora solo simula agregar a la lista
+                const imgList = document.getElementById('imageList');
+                const imgItem = document.createElement('div');
+                imgItem.className = 'image-item';
+                imgItem.innerHTML = `<img src='${e.target.result}' alt='${file.name}'>`;
+                imgList.appendChild(imgItem);
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+
+        // Background Image Management
+        function previewBackground(event, page) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                pendingBgChange = { page, dataUrl: e.target.result };
+                const html = `
+                    <div class="preview-explanation">
+                        <h4>Vista previa de la página ${getPageTitle(page)}</h4>
+                        <p>Así se verá la página con la nueva imagen de fondo y el filtro azul aplicado.</p>
+                    </div>
+                    <div style="position: relative; height: 400px; overflow: hidden; border-radius: var(--radius);">
+                        <div style="
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background-image: url('${e.target.result}');
+                            background-size: cover;
+                            background-position: center;
+                            filter: brightness(0.9);">
+                        </div>
+                        <div style="
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background: rgba(10, 42, 102, 0.7);
+                            z-index: 1;">
+                        </div>
+                        <div style="
+                            position: relative;
+                            z-index: 2;
+                            color: white;
+                            padding: 40px;
+                            text-align: center;">
+                            ${getPagePreviewContent(page)}
+                        </div>
+                    </div>
+                `;
+                showPreviewDialog(html, function() {
+                    if (pendingBgChange && pendingBgChange.page && pendingBgChange.dataUrl) {
+                        const currentBg = document.getElementById(`current${capitalizeFirstLetter(pendingBgChange.page)}Bg`);
+                        currentBg.style.backgroundImage = `url('${pendingBgChange.dataUrl}')`;
+                        localStorage.setItem(`${pendingBgChange.page}Background`, pendingBgChange.dataUrl);
+                    }
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function getPageTitle(page) {
+            const titles = {
+                'index': 'Principal',
+                'servicios': 'Servicios',
+                'terms': 'Términos',
+                'contacto': 'Contacto'
+            };
+            return titles[page] || page;
+        }
+
+        function getPagePreviewContent(page) {
+            const content = {
+                'index': `
+                    <h1>IMPRESIÓN 3D CREATIVA</h1>
+                    <p>Transformamos tus ideas en realidad con tecnología de vanguardia y diseño personalizado.</p>
+                `,
+                'servicios': `
+                    <h1>NUESTROS SERVICIOS</h1>
+                    <p>Soluciones personalizadas para tus necesidades de impresión 3D.</p>
+                `,
+                'terms': `
+                    <h1>TÉRMINOS Y CONDICIONES</h1>
+                    <p>Información legal y condiciones de servicio.</p>
+                `,
+                'contacto': `
+                    <h1>CONTACTO</h1>
+                    <p>Estamos aquí para ayudarte. ¡Contáctanos!</p>
+                `
+            };
+            return content[page] || '';
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        // Load saved backgrounds on page load
+        window.addEventListener('load', function() {
+            const pages = ['index', 'servicios', 'terms', 'contacto'];
+            pages.forEach(page => {
+                const savedBg = localStorage.getItem(`${page}Background`);
+                if (savedBg) {
+                    const currentBg = document.getElementById(`current${capitalizeFirstLetter(page)}Bg`);
+                    currentBg.style.backgroundImage = `url('${savedBg}')`;
+                }
+            });
+        });
+
+        // Mostrar la imagen de fondo actual en cada sección de fondos
+function mostrarFondosActuales() {
+    const fondos = [
+        { key: 'indexBackground', id: 'currentIndexBg', defaultImg: 'images/hero-bg.jpg' },
+        { key: 'serviciosBackground', id: 'currentServiciosBg', defaultImg: 'images/servicios-bg.jpg' },
+        { key: 'termsBackground', id: 'currentTermsBg', defaultImg: 'images/terms-bg.jpg' },
+        { key: 'contactoBackground', id: 'currentContactoBg', defaultImg: 'images/contacto-bg.jpg' }
+    ];
+    fondos.forEach(fondo => {
+        const url = localStorage.getItem(fondo.key) || fondo.defaultImg;
+        const cont = document.getElementById(fondo.id);
+        if (cont) {
+            cont.innerHTML = `<img src='${url}' alt='Fondo actual' style='max-width:100%;max-height:120px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);background:#eee;'>`;
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', mostrarFondosActuales);
+
+    // --- Servicios editables en línea ---
+let editableServices = [
+    { icon: '🎨', title: 'Diseño 3D', description: 'Convertimos tus ideas en modelos 3D profesionales.' },
+    { icon: '⚡', title: 'Impresión Rápida', description: 'Utilizamos tecnología de última generación.' },
+    { icon: '💡', title: 'Asesoría Experta', description: 'Te guiamos en cada paso del proceso.' }
+];
+
+function renderEditableServices() {
+    const iconOptions = [
+        '🎨', '⚡', '💡', '🛠️', '🖨️', '📦', '🔧', '🚀', '⭐', '✨', '🔬', '📐', '📊', '🧩', '🖌️', '🧑‍💻', '🏆', '💎', '🔗', '📷'
+    ];
+    const container = document.getElementById('editableServices');
+    container.innerHTML = editableServices.map((service, i) => `
+        <div class="service-item" data-index="${i}">
+            <div class="form-group">
+                <label class="form-label">Ícono</label>
+                <select class="form-control" onchange="updateEditableService(${i}, 'icon', this.value)">
+                    ${iconOptions.map(icon => `<option value='${icon}' ${icon === service.icon ? 'selected' : ''}>${icon}</option>`).join('')}
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Título</label>
+                <input type="text" class="form-control" value="${service.title}" onchange="updateEditableService(${i}, 'title', this.value)">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Descripción</label>
+                <textarea class="form-control" onchange="updateEditableService(${i}, 'description', this.value)">${service.description}</textarea>
+            </div>
+            <button class="btn btn-danger" onclick="deleteEditableService(${i})">
+                <span class="material-icons">delete</span>
+                Eliminar
+            </button>
+        </div>
+    `).join('');
+}
+
+function updateEditableService(index, field, value) {
+    editableServices[index][field] = value;
+    saveEditableServices();
+}
+
+function addEditableService() {
+    editableServices.push({ icon: '✨', title: 'Nuevo Servicio', description: 'Descripción del nuevo servicio' });
+    renderEditableServices();
+    saveEditableServices();
+}
+
+let serviceToDeleteIndex = null;
+function deleteEditableService(index) {
+    serviceToDeleteIndex = index;
+    document.getElementById('deleteServiceModal').classList.add('active');
+    // Focus eliminar
+    setTimeout(() => {
+      document.getElementById('btnConfirmDeleteService').focus();
+    }, 100);
+}
+
+function closeDeleteServiceModal() {
+    document.getElementById('deleteServiceModal').classList.remove('active');
+    serviceToDeleteIndex = null;
+}
+
+document.getElementById('btnConfirmDeleteService').onclick = function() {
+    if (serviceToDeleteIndex !== null) {
+        editableServices.splice(serviceToDeleteIndex, 1);
+        renderEditableServices();
+        saveEditableServices();
+        closeDeleteServiceModal();
+    }
+}
+
+function saveEditableServices() {
+    localStorage.setItem('editableServices', JSON.stringify(editableServices));
+    showAlert('success', 'Servicios actualizados');
+}
+
+function loadEditableServices() {
+    const saved = localStorage.getItem('editableServices');
+    if (saved) {
+        editableServices = JSON.parse(saved);
+    }
+    renderEditableServices();
+}
+document.addEventListener('DOMContentLoaded', loadEditableServices);
+
+document.getElementById('btnApplyServices').onclick = function() {
+    saveEditableServices();
+    showAlert('success', '¡Cambios aplicados en la página de servicios!');
+};
+    </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+[env.development]
+name = "impretam3d-dev"
+workers_dev = true
+
+[env.production]
+name = "impretam3d"
+workers_dev = true
+
+[site]
+bucket = "./"
+entry-point = "workers-site"

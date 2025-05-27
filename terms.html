@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Términos y Condiciones - Impretam 3D</title>
+    <link rel="stylesheet" href="css/whatsapp.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .header { background: #0a2a66; color: #fff; padding: 20px; display: flex; align-items: center; }
+        .logo { font-size: 2.5em; font-weight: bold; margin-right: 20px; }
+        .nav { margin-left: auto; }
+        .nav a { color: #fff; text-decoration: none; margin: 0 10px; font-size: 1.1em; }
+        .footer { background: #0a2a66; color: #fff; text-align: center; padding: 15px 0; position: fixed; width: 100%; bottom: 0; }
+        
+        .terms-hero {
+            background: linear-gradient(rgba(10, 42, 102, 0.9), rgba(10, 42, 102, 0.9)),
+                        url('https://images.unsplash.com/photo-1557838923-2985c318be48?auto=format&fit=crop&q=80') center/cover;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .terms-hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .terms-content {
+            max-width: 800px;
+            margin: 40px auto 100px;
+            padding: 0 20px;
+        }
+
+        .terms-section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .terms-section h2 {
+            color: #0a2a66;
+            margin-bottom: 20px;
+        }
+
+        .terms-section p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .terms-section ul {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        .terms-section li {
+            margin-bottom: 10px;
+        }
+
+        /* WhatsApp Button Styles */
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            text-align: center;
+            font-size: 24px;
+            z-index: 1000;
+        }
+
+        .whatsapp-button img {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span class="logo">Impretam 3D</span>
+        <nav class="nav">
+            <a href="index.html">Inicio</a>
+            <a href="servicios.html">Servicios</a>
+            <a href="contacto.html">Contacto</a>
+        </nav>
+    </div>
+
+    <div class="terms-hero">        <h1>Términos y Condiciones</h1>
+        <p>Información importante sobre nuestros servicios</p>
+    </div>
+
+    <div class="terms-content">
+        <div class="terms-section">            <h2>Política de Pagos</h2>
+            <p>Para garantizar la calidad de nuestros servicios, manejamos las siguientes condiciones de pago:</p>
+            <ul>
+                <li>50% de depósito después de la aceptación de la propuesta</li>
+                <li>50% restante antes de la entrega final</li>
+                <li>Aceptamos transferencias bancarias y pagos en efectivo</li>
+                <li>Garantía de devolución de dinero si no está completamente satisfecho con el resultado</li>
+            </ul>
+            <p>Nuestro compromiso es su satisfacción total. Si por alguna razón no está completamente satisfecho con nuestro trabajo, trabajaremos con usted para resolver cualquier problema o le reembolsaremos su dinero.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>Política de Envíos</h2>
+            <ul>
+                <li>Envíos a toda la República Mexicana</li>
+                <li>Tiempo estimado de entrega: 3-5 días hábiles</li>
+                <li>Embalaje especial para proteger las impresiones 3D</li>
+                <li>Seguimiento de envío disponible</li>
+            </ul>
+        </div>
+
+        <div class="terms-section">
+            <h2>Garantía de Calidad</h2>
+            <p>Todos nuestros trabajos incluyen:</p>
+            <ul>
+                <li>Garantía de satisfacción en acabados y calidad de impresión</li>
+                <li>Revisión y pruebas antes del envío</li>
+                <li>Soporte post-venta</li>
+                <li>Posibilidad de ajustes y modificaciones según requerimientos</li>
+            </ul>
+        </div>
+
+        <div class="terms-section">
+            <h2>Política de Modificaciones y Cancelaciones</h2>
+            <ul>
+                <li>Cambios sin costo adicional durante la fase de diseño inicial</li>
+                <li>Cancelaciones aceptadas solo antes de iniciar la impresión</li>
+                <li>El anticipo no es reembolsable una vez iniciado el trabajo</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="#" class="whatsapp-button" onclick="createWhatsAppPopup(); return false;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </a>
+
+    <div class="footer">
+        <div style="margin-bottom: 10px;">            <a href="terms.html" style="color: white; text-decoration: none; margin: 0 10px;">Términos y Condiciones</a>
+        </div>
+        &copy; 2025 Impretam 3D
+    </div>    <script src="js/whatsapp.js"></script>
+    <script>
+        // Cargar el fondo guardado al cargar la página
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedBg = localStorage.getItem('termsBackground');
+            if (savedBg) {
+                const heroSection = document.querySelector('.terms-hero');
+                heroSection.style.background = `linear-gradient(rgba(10, 42, 102, 0.7), rgba(10, 42, 102, 0.7)), url('${savedBg}') center/cover`;
+            }
+        });
+    </script>
+</body>
+</html>
