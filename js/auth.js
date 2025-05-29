@@ -41,7 +41,7 @@ function verificarAutenticacion() {
 // Función para cerrar sesión
 function cerrarSesion() {
     sessionStorage.removeItem('autenticado');
-    window.location.href = '../index.html';
+    window.location.href = '/index.html'; // Redirige siempre a la raíz
 }
 
 // Función para proteger páginas que requieren autenticación

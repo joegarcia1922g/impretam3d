@@ -371,12 +371,14 @@
         };    </script>
 
     <script>
-        // Cargar y aplicar imagen de fondo desde localStorage
+        // Cargar y aplicar imagen de fondo desde localStorage (igual que en index, terms y servicios)
         document.addEventListener('DOMContentLoaded', function() {
-            const savedBg = localStorage.getItem('contactBackground');
+            const savedBg = localStorage.getItem('contactoBackground');
             if (savedBg) {
                 const hero = document.querySelector('.contact-hero');
-                hero.style.background = `linear-gradient(rgba(10, 42, 102, 0.9), rgba(10, 42, 102, 0.9)), url(${savedBg}) center/cover`;
+                if (hero) {
+                    hero.style.background = `linear-gradient(rgba(10, 42, 102, 0.9), rgba(10, 42, 102, 0.9)), url(${savedBg}) center/cover`;
+                }
             }
         });
     </script>
