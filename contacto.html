@@ -368,7 +368,17 @@
                 submitButton.innerHTML = originalButtonText;
                 submitButton.disabled = false;
             });
-        };
+        };    </script>
+
+    <script>
+        // Cargar y aplicar imagen de fondo desde localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedBg = localStorage.getItem('contactBackground');
+            if (savedBg) {
+                const hero = document.querySelector('.contact-hero');
+                hero.style.background = `linear-gradient(rgba(10, 42, 102, 0.9), rgba(10, 42, 102, 0.9)), url(${savedBg}) center/cover`;
+            }
+        });
     </script>
 <!--
 INSTRUCCIONES:
