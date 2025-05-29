@@ -6,6 +6,6 @@ workers_dev = true
 name = "impretam3d"
 workers_dev = true
 
-[site]
-bucket = "./"
-entry-point = "workers-site"
+# Updated configuration for newer Wrangler
+pages_build_output_dir = "./"
+compatibility_date = "2025-05-29"
