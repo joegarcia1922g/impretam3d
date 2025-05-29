@@ -19,8 +19,7 @@
 
         .contact-hero {
             height: 40vh;
-            background: linear-gradient(rgba(10, 42, 102, 0.9), rgba(10, 42, 102, 0.9)),
-                        url('https://images.unsplash.com/photo-1557838923-2985c318be48?auto=format&fit=crop&q=60&w=1200') center/cover;
+            background: linear-gradient(rgba(10, 42, 102, 0.9), rgba(10, 42, 102, 0.9)) center/cover; /* Removed static URL */
             color: white;
             display: flex;
             align-items: center;
@@ -368,26 +367,16 @@
                 submitButton.innerHTML = originalButtonText;
                 submitButton.disabled = false;
             });
-        };    </script>
-
-    <script>
-        // Cargar y aplicar imagen de fondo desde localStorage (igual que en index, terms y servicios)
+        };    </script>    <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const savedBg = localStorage.getItem('contactoBackground');
-            if (savedBg) {
-                const hero = document.querySelector('.contact-hero');
-                if (hero) {
-                    hero.style.background = `linear-gradient(rgba(10, 42, 102, 0.9), rgba(10, 42, 102, 0.9)), url(${savedBg}) center/cover`;
+            const contactHero = document.querySelector('.contact-hero');
+            if (contactHero) {
+                const savedBg = localStorage.getItem('contactoBackground');
+                if (savedBg) {
+                    contactHero.style.backgroundImage = `linear-gradient(rgba(10, 42, 102, 0.9), rgba(10, 42, 102, 0.9)), url('${savedBg}')`;
                 }
             }
         });
     </script>
-<!--
-INSTRUCCIONES:
-- Regístrate en https://www.emailjs.com/
-- Crea un servicio (serviceID) y una plantilla (templateID) que envíe a joegarcia2392@gmail.com
-- Reemplaza 'TU_USER_ID_EMAILJS', 'TU_SERVICE_ID' y 'TU_TEMPLATE_ID' por los valores de tu cuenta EmailJS.
-- Puedes personalizar el template para que el correo incluya nombre, teléfono, correo y mensaje.
--->
 </body>
 </html>

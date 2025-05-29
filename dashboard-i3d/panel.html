@@ -587,12 +587,17 @@
                     </ul>
                 </div>
                 <div class="nav-section">
-                    <div class="nav-section-title">Configuración</div>
-                    <ul class="nav-items">
+                    <div class="nav-section-title">Configuración</div>                    <ul class="nav-items">
                         <li>
                             <a href="#ajustes" class="nav-item" data-section="ajustes">
                                 <span class="material-icons">settings</span>
                                 Ajustes
+                            </a>
+                        </li>
+                        <li>
+                            <a href="../index.html" class="nav-item">
+                                <span class="material-icons">home</span>
+                                Ir a Página Principal
                             </a>
                         </li>
                         <li>
@@ -1147,5 +1152,46 @@ document.getElementById('btnApplyServices').onclick = function() {
     showAlert('success', '¡Cambios aplicados en la página de servicios!');
 };
     </script>
+
+    <!-- Admin Navigation (always visible) -->
+    <div class="admin-nav" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        box-sizing: border-box;
+    ">
+        <a href="../index.html" target="_self" class="admin-button" style="
+            background: #0a2a66;
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            margin-right: 10px;
+        ">Ir a Página Principal</a>
+        <a href="../index.html" target="_blank" style="
+            color: #0a2a66;
+            text-decoration: none;
+            font-weight: 500;
+            margin-right: 10px;
+        ">Ver sitio</a>
+        <button class="logout-button" onclick="cerrarSesion()" style="
+            background: none;
+            border: none;
+            color: #0a2a66;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+        ">Cerrar sesión</button>
+    </div>
 </body>
 </html>
