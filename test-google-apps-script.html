@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Google Apps Script - Impretam 3D</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0a2a66;
+            text-align: center;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        .test-section h3 {
+            color: #1a7f37;
+            margin-top: 0;
+        }
+        button {
+            background: #1a7f37;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #1e9341;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Herramienta de Diagnóstico - Google Apps Script</h1>
+        <p><strong>Propósito:</strong> Esta página te ayuda a diagnosticar problemas con el sistema de contacto de Impretam 3D.</p>
+        
+        <div class="warning">
+            <strong>⚠️ INSTRUCCIONES IMPORTANTES:</strong><br>
+            1. Antes de usar estas pruebas, asegúrate de haber copiado el script correcto en Google Apps Script<br>
+            2. Verifica que el deployment esté activo y configurado como "Web app"<br>
+            3. Los emails de prueba se enviarán a impretam3d@gmail.com
+        </div>
+
+        <!-- URL Configuration -->
+        <div class="test-section">
+            <h3>📡 1. Configuración de URL del Script</h3>
+            <p>Ingresa la URL de deployment de tu Google Apps Script:</p>
+            <div class="form-group">
+                <label for="scriptUrl">URL del Google Apps Script:</label>
+                <input type="url" id="scriptUrl" placeholder="https://script.google.com/macros/s/[ID]/exec">
+            </div>
+            <button onclick="saveUrl()">💾 Guardar URL</button>
+            <button onclick="loadDefaultUrl()">🔄 Cargar URL por defecto</button>
+            <div id="urlResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Basic Connectivity Test -->
+        <div class="test-section">
+            <h3>🌐 2. Prueba de Conectividad Básica (GET)</h3>
+            <p>Verifica si el script responde a peticiones básicas:</p>
+            <button onclick="testBasicConnectivity()">🔍 Probar Conectividad</button>
+            <div id="connectivityResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Email Test -->
+        <div class="test-section">
+            <h3>📧 3. Prueba de Envío de Email (POST)</h3>
+            <p>Envía un email de prueba simple para verificar la funcionalidad básica:</p>
+            <button onclick="testEmailSending()">📤 Enviar Email de Prueba</button>
+            <div id="emailResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Contact Form Test -->
+        <div class="test-section">
+            <h3>📝 4. Prueba de Formulario de Contacto Completo</h3>
+            <p>Simula el envío del formulario de contacto completo:</p>
+            
+            <div class="form-group">
+                <label for="testName">Nombre:</label>
+                <input type="text" id="testName" value="Usuario de Prueba">
+            </div>
+            <div class="form-group">
+                <label for="testPhone">Teléfono:</label>
+                <input type="tel" id="testPhone" value="555-0123">
+            </div>
+            <div class="form-group">
+                <label for="testEmail">Email:</label>
+                <input type="email" id="testEmail" value="prueba@test.com">
+            </div>
+            <div class="form-group">
+                <label for="testMessage">Mensaje:</label>
+                <textarea id="testMessage">Este es un mensaje de prueba del sistema de contacto. Si recibes este email, el sistema está funcionando correctamente.</textarea>
+            </div>
+            
+            <button onclick="testContactForm()">📨 Enviar Formulario de Prueba</button>
+            <div id="contactResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Results Summary -->
+        <div class="test-section">
+            <h3>📊 5. Resumen de Resultados</h3>
+            <div id="summaryResult" class="result info">
+                Ejecuta las pruebas arriba para ver un resumen de los resultados.
+            </div>
+            <button onclick="generateSummary()">📋 Generar Resumen</button>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEv0yZ_QuHC-cYeFBHYsfM7RCLndgsgkzFHtb-mf1D1NfIaM-qCwqAbjbw7Ly0Q1H9/exec';
+        let currentScriptUrl = DEFAULT_SCRIPT_URL;
+        let testResults = {};
+
+        // Load saved URL on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const saved = localStorage.getItem('scriptUrl');
+            if (saved) {
+                currentScriptUrl = saved;
+                document.getElementById('scriptUrl').value = saved;
+            } else {
+                document.getElementById('scriptUrl').value = DEFAULT_SCRIPT_URL;
+            }
+        });
+
+        // Save URL
+        function saveUrl() {
+            const url = document.getElementById('scriptUrl').value.trim();
+            if (!url) {
+                showResult('urlResult', 'Por favor ingresa una URL válida', 'error');
+                return;
+            }
+            
+            currentScriptUrl = url;
+            localStorage.setItem('scriptUrl', url);
+            showResult('urlResult', `URL guardada: ${url}`, 'success');
+        }
+
+        // Load default URL
+        function loadDefaultUrl() {
+            document.getElementById('scriptUrl').value = DEFAULT_SCRIPT_URL;
+            currentScriptUrl = DEFAULT_SCRIPT_URL;
+            localStorage.setItem('scriptUrl', DEFAULT_SCRIPT_URL);
+            showResult('urlResult', 'URL por defecto cargada', 'info');
+        }
+
+        // Test basic connectivity
+        async function testBasicConnectivity() {
+            showResult('connectivityResult', 'Probando conectividad...', 'info');
+            
+            try {
+                const response = await fetch(currentScriptUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const text = await response.text();
+                let data;
+                
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    data = { rawResponse: text };
+                }
+                
+                testResults.connectivity = {
+                    success: response.ok,
+                    status: response.status,
+                    data: data
+                };
+                
+                if (response.ok) {
+                    showResult('connectivityResult', 
+                        `✅ CONECTIVIDAD OK\nStatus: ${response.status}\nRespuesta: ${JSON.stringify(data, null, 2)}`, 
+                        'success');
+                } else {
+                    showResult('connectivityResult', 
+                        `❌ ERROR DE CONECTIVIDAD\nStatus: ${response.status}\nRespuesta: ${text}`, 
+                        'error');
+                }
+                
+            } catch (error) {
+                testResults.connectivity = { success: false, error: error.message };
+                showResult('connectivityResult', 
+                    `❌ ERROR DE RED\n${error.message}\n\nVerifica:\n1. URL del script\n2. Deployment activo\n3. Permisos de red`, 
+                    'error');
+            }
+        }
+
+        // Test email sending
+        async function testEmailSending() {
+            showResult('emailResult', 'Enviando email de prueba...', 'info');
+            
+            try {
+                const testData = {
+                    test: 'simple_email'
+                };
+                
+                const response = await fetch(currentScriptUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                const text = await response.text();
+                let data;
+                
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    data = { rawResponse: text };
+                }
+                
+                testResults.email = {
+                    success: response.ok && data.success !== false,
+                    status: response.status,
+                    data: data
+                };
+                
+                if (response.ok && data.success !== false) {
+                    showResult('emailResult', 
+                        `✅ EMAIL ENVIADO\nStatus: ${response.status}\nRespuesta: ${JSON.stringify(data, null, 2)}\n\n📧 Revisa la bandeja de entrada de impretam3d@gmail.com`, 
+                        'success');
+                } else {
+                    showResult('emailResult', 
+                        `❌ ERROR ENVIANDO EMAIL\nStatus: ${response.status}\nRespuesta: ${JSON.stringify(data, null, 2)}`, 
+                        'error');
+                }
+                
+            } catch (error) {
+                testResults.email = { success: false, error: error.message };
+                showResult('emailResult', 
+                    `❌ ERROR DE RED\n${error.message}`, 
+                    'error');
+            }
+        }
+
+        // Test contact form
+        async function testContactForm() {
+            showResult('contactResult', 'Enviando formulario de contacto...', 'info');
+            
+            try {
+                const formData = new FormData();
+                formData.append('name', document.getElementById('testName').value);
+                formData.append('phone', document.getElementById('testPhone').value);
+                formData.append('email', document.getElementById('testEmail').value);
+                formData.append('message', document.getElementById('testMessage').value);
+                formData.append('hasFiles', 'false');
+                formData.append('files', '[]');
+                
+                const response = await fetch(currentScriptUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const text = await response.text();
+                let data;
+                
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    data = { rawResponse: text };
+                }
+                
+                testResults.contactForm = {
+                    success: response.ok && data.success !== false,
+                    status: response.status,
+                    data: data
+                };
+                
+                if (response.ok && data.success !== false) {
+                    showResult('contactResult', 
+                        `✅ FORMULARIO ENVIADO\nStatus: ${response.status}\nRespuesta: ${JSON.stringify(data, null, 2)}\n\n📧 Revisa la bandeja de entrada de impretam3d@gmail.com`, 
+                        'success');
+                } else {
+                    showResult('contactResult', 
+                        `❌ ERROR EN FORMULARIO\nStatus: ${response.status}\nRespuesta: ${JSON.stringify(data, null, 2)}`, 
+                        'error');
+                }
+                
+            } catch (error) {
+                testResults.contactForm = { success: false, error: error.message };
+                showResult('contactResult', 
+                    `❌ ERROR DE RED\n${error.message}`, 
+                    'error');
+            }
+        }
+
+        // Generate summary
+        function generateSummary() {
+            let summary = '📊 RESUMEN DE DIAGNÓSTICO\n';
+            summary += '=' .repeat(50) + '\n\n';
+            
+            summary += `🌐 Conectividad: ${testResults.connectivity ? (testResults.connectivity.success ? '✅ OK' : '❌ FALLO') : '⏳ NO PROBADO'}\n`;
+            summary += `📧 Email: ${testResults.email ? (testResults.email.success ? '✅ OK' : '❌ FALLO') : '⏳ NO PROBADO'}\n`;
+            summary += `📝 Formulario: ${testResults.contactForm ? (testResults.contactForm.success ? '✅ OK' : '❌ FALLO') : '⏳ NO PROBADO'}\n\n`;
+            
+            // Análisis
+            const allSuccess = Object.values(testResults).every(result => result && result.success);
+            const anyTested = Object.keys(testResults).length > 0;
+            
+            if (!anyTested) {
+                summary += '⚠️ ESTADO: Ninguna prueba ejecutada\n';
+                summary += 'ACCIÓN: Ejecuta las pruebas arriba\n';
+            } else if (allSuccess) {
+                summary += '🎉 ESTADO: Todos los sistemas funcionando\n';
+                summary += '✅ ACCIÓN: El problema puede estar en:\n';
+                summary += '   • Emails llegando a spam\n';
+                summary += '   • Configuración del deployment\n';
+                summary += '   • Límites de Google Apps Script\n';
+            } else {
+                summary += '🚨 ESTADO: Problemas detectados\n';
+                summary += '❌ ACCIÓN REQUERIDA:\n';
+                summary += '   • Verifica el deployment en Google Apps Script\n';
+                summary += '   • Revisa los permisos del script\n';
+                summary += '   • Comprueba la URL del deployment\n';
+            }
+            
+            summary += '\n📅 Generado: ' + new Date().toLocaleString();
+            
+            showResult('summaryResult', summary, allSuccess && anyTested ? 'success' : 'error');
+        }
+
+        // Helper function to show results
+        function showResult(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `result ${type}`;
+            element.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

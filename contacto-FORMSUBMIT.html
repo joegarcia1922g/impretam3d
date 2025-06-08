@@ -14,102 +14,204 @@
         .header { background: #0a2a66; color: #fff; padding: 20px; display: flex; align-items: center; }
         .logo { font-size: 2.5em; font-weight: bold; margin-right: 20px; cursor: pointer; }
         .nav { margin-left: auto; }
-        .nav a { color: #fff; text-decoration: none; margin: 0 10px; font-size: 1.1em; }
-        .footer { background: #0a2a66; color: #fff; text-align: center; padding: 15px 0; position: fixed; width: 100%; bottom: 0; }
-
+        .nav a { color: #fff; text-decoration: none; margin: 0 15px; }
+        .nav a:hover { text-decoration: underline; }
+        
         .contact-hero {
-            height: 40vh;
-            background: linear-gradient(rgba(10, 42, 102, 0.9), rgba(10, 42, 102, 0.9)) center/cover;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: linear-gradient(rgba(10, 42, 102, 0.7), rgba(10, 42, 102, 0.7)), 
+                        url('https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-4.0.3') center/cover;
+            color: #fff;
             text-align: center;
-            padding: 20px;
+            padding: 100px 20px;
         }
-
+        
         .contact-hero h1 {
             font-size: 3.5em;
-            margin-bottom: 20px;
-            animation: slideDown 1s ease-out;
+            margin: 0;
+            animation: slideUp 1s ease-out;
         }
-
+        
         .contact-hero p {
-            font-size: 1.2em;
+            font-size: 1.3em;
+            margin: 20px auto;
             max-width: 600px;
-            animation: fadeIn 1s ease-out 0.5s forwards;
-            opacity: 0;
+            animation: slideUp 1s ease-out 0.2s both;
         }
-
+        
         .contact-container {
             display: flex;
             max-width: 1200px;
-            margin: -50px auto 100px;
+            margin: -50px auto 80px;
             padding: 0 20px;
-            position: relative;
-            z-index: 1;
+            gap: 40px;
         }
-
+        
         .contact-form {
-            flex: 1;
-            background: white;
+            flex: 2;
+            background: #fff;
             padding: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            animation: slideUp 1s ease-out;
+            position: relative;
+            z-index: 10;
         }
-
-        .contact-info {
-            background: #f8f9fa;
-            padding: 40px;
-            border-radius: 15px;
-            margin-left: 30px;
-            width: 300px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        input, textarea {
+        
+        .contact-form input, .contact-form textarea {
+            width: 100%;
             padding: 15px;
-            border: 2px solid #eee;
+            margin: 10px 0;
+            border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 1em;
             transition: border-color 0.3s ease;
+            box-sizing: border-box;
         }
-
-        input:focus, textarea:focus {
-            border-color: #1a7f37;
+        
+        .contact-form input:focus, .contact-form textarea:focus {
             outline: none;
+            border-color: #1a7f37;
         }
-
-        textarea {
-            min-height: 150px;
+        
+        .contact-form textarea {
+            height: 120px;
             resize: vertical;
+        }
+        
+        /* File upload styles */
+        .file-upload-container {
+            margin: 20px 0;
+        }
+        
+        .file-upload-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .file-upload-label small {
+            display: block;
+            font-weight: normal;
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .file-upload-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            background: #f9f9f9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload-input:hover {
+            border-color: #1a7f37;
+            background: #f0f8f0;
+        }
+        
+        /* Multiple files display */
+        .files-list {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .file-details {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-grow: 1;
+        }
+        
+        .file-icon {
+            font-size: 1.2em;
+        }
+        
+        .file-name {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .file-size {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .remove-file-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        
+        .remove-file-btn:hover {
+            background: #c82333;
+        }
+        
+        .total-size {
+            margin-top: 10px;
+            font-weight: bold;
+            padding: 8px;
+            border-radius: 4px;
+            background: #e8f5e8;
+            color: #2d5a2d;
+        }
+        
+        .total-size.over-limit {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .remove-all-btn {
+            margin-top: 10px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .remove-all-btn:hover {
+            background: #5a6268;
         }
 
         button {
             background: #1a7f37;
-            color: white;
+            color: #fff;
+            padding: 15px 30px;
             border: none;
-            padding: 15px;
             border-radius: 8px;
             font-size: 1.1em;
-            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            width: 100%;
+            margin-top: 20px;
         }
 
         button:hover {
             background: #1e9341;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
             box-shadow: 0 5px 15px rgba(26,127,55,0.2);
         }
 
@@ -148,135 +250,27 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        /* Estilos para el campo de archivo */
-        .file-upload-container {
-            margin: 20px 0;
-        }
-
-        .file-upload-label {
-            display: block;
-            padding: 15px;
-            border: 2px dashed #ddd;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f9f9f9;
-            color: #666;
-        }
-
-        .file-upload-label:hover {
-            border-color: #1a7f37;
-            background: #f0f8f0;
-            color: #1a7f37;
-        }
-
-        .file-upload-label small {
-            display: block;
-            margin-top: 5px;
-            font-size: 0.85em;
-            color: #999;
-        }
-
-        .file-upload-input {
-            display: none;
-        }
-
-        .file-info {
-            margin-top: 10px;
-            padding: 10px;
-            background: #e8f5e8;
-            border-radius: 4px;
-            font-size: 0.9em;
-            color: #1a7f37;
-        }
-
-        .file-info .remove-file {
-            color: #dc3545;
-            cursor: pointer;
-            margin-left: 10px;
-            text-decoration: underline;
-        }
-
-        /* Estilos para lista de archivos múltiples */
-        .files-list {
-            margin-top: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border: 1px solid #e9ecef;
-        }
-
-        .file-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .file-item:last-child {
-            border-bottom: none;
-        }
-
-        .file-details {
+        
+        .contact-info {
             flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin-left: 40px;
         }
-
-        .file-icon {
-            font-size: 1.2em;
-        }
-
-        .file-name {
-            font-weight: 500;
-            color: #333;
-        }
-
-        .file-size {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .remove-file-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8em;
-            transition: background 0.3s ease;
-        }
-
-        .remove-file-btn:hover {
-            background: #c82333;
-        }
-
-        .total-size {
-            font-weight: bold;
-            color: #1a7f37;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 2px solid #e9ecef;
-        }
-
-        .total-size.over-limit {
-            color: #dc3545;
-        }
-
+        
         .info-item {
-            margin-bottom: 30px;
+            background: #fff;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         }
-
+        
         .info-item h3 {
             color: #0a2a66;
-            margin-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.3em;
         }
-
+        
         .info-item p {
             color: #666;
             line-height: 1.6;
@@ -318,8 +312,8 @@
             border-radius: 8px;
             margin-top: 20px;
             border: 1px solid #c3e6cb;
-            text-align: center;
-            font-weight: bold;
+            display: none;
+            animation: slideUp 0.5s ease-out;
         }
 
         .error-message {
@@ -329,34 +323,63 @@
             border-radius: 8px;
             margin-top: 20px;
             border: 1px solid #f5c6cb;
-            text-align: center;
+            display: none;
+            animation: slideUp 0.5s ease-out;
         }
 
         .fallback-button {
             background: #007bff;
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
+            padding: 8px 15px;
+            border-radius: 4px;
             cursor: pointer;
-            margin-top: 10px;
             text-decoration: none;
             display: inline-block;
+            margin: 5px 0;
         }
 
         .fallback-button:hover {
             background: #0056b3;
         }
 
-        /* Animaciones */
-        @keyframes slideDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        /* WhatsApp Button Styles */
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .whatsapp-button img {
+            width: 35px;
+            height: 35px;
+        }
+
+        .whatsapp-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 211, 102, 0.6);
+        }
+
+        /* Footer */
+        .footer {
+            background: #0a2a66;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
         }
 
         @keyframes slideUp {
@@ -413,7 +436,15 @@
 
     <div class="contact-container">
         <div class="contact-form">
-            <form id="contactForm" method="POST" enctype="multipart/form-data">
+            <!-- FORMULARIO CON FORMSUBMIT COMO ALTERNATIVA -->
+            <form id="contactForm" method="POST" action="https://formsubmit.co/impretam3d@gmail.com" enctype="multipart/form-data">
+                <!-- Configuración de FormSubmit -->
+                <input type="hidden" name="_subject" value="Nuevo contacto desde web - Impretam 3D">
+                <input type="hidden" name="_next" value="https://impretam3d.com/contacto.html">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                
+                <!-- Campos del formulario -->
                 <input type="text" name="name" placeholder="Tu nombre" required>
                 <input type="tel" name="phone" pattern="[0-9]{10}" title="Ingresa 10 dígitos" placeholder="Tu teléfono" required>
                 <input type="email" name="email" placeholder="Tu correo electrónico" required>
@@ -472,9 +503,11 @@
 
                 // Función para formatear tamaño de archivo
                 function formatFileSize(bytes) {
-                    if (bytes < 1024) return bytes + ' B';
-                    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-                    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
                 }
 
                 // Función para calcular tamaño total
@@ -514,6 +547,14 @@
                             ${isOverLimit ? '⚠️ Excede el límite' : '✅'}
                         </div>
                     `;
+                    
+                    if (selectedFiles.length > 1) {
+                        filesList.innerHTML += `
+                            <button type="button" class="remove-all-btn" onclick="removeAllFiles()">
+                                🗑️ Quitar todos los archivos
+                            </button>
+                        `;
+                    }
                     
                     filesList.style.display = 'block';
                     fileInfo.style.display = 'none';
@@ -583,56 +624,33 @@
                     }
                 });
 
-                // Función para convertir archivo a base64
-                function convertToBase64(file) {
-                    return new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.readAsDataURL(file);
-                        reader.onload = () => {
-                            // Remover el prefijo "data:mime/type;base64,"
-                            const base64 = reader.result.split(',')[1];
-                            resolve(base64);
-                        };
-                        reader.onerror = error => reject(error);
-                    });
-                }
-
-                // Función para convertir múltiples archivos a base64
-                async function convertMultipleFilesToBase64(files) {
-                    const filePromises = files.map(async (file) => ({
-                        name: file.name,
-                        type: file.type,
-                        size: file.size,
-                        content: await convertToBase64(file)
-                    }));
-                    
-                    return await Promise.all(filePromises);
-                }
-
-                form.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    
+                // Manejar envío del formulario con FormSubmit
+                form.addEventListener('submit', function(e) {
                     // 🚫 PROTECCIÓN ANTI-SPAM NIVEL 1: Verificar estado de envío
                     if (isSubmitting) {
                         console.log('🚫 SPAM BLOQUEADO: Envío ya en progreso');
+                        e.preventDefault();
                         return false;
                     }
                     
                     // 🚫 PROTECCIÓN ANTI-SPAM NIVEL 2: Verificar si ya se envió antes
                     if (formAlreadySubmitted) {
                         console.log('🚫 SPAM BLOQUEADO: Formulario ya enviado anteriormente');
+                        e.preventDefault();
                         return false;
                     }
                     
                     // 🚫 PROTECCIÓN ANTI-SPAM NIVEL 3: Verificar botón deshabilitado
                     if (submitBtn.disabled) {
                         console.log('🚫 SPAM BLOQUEADO: Botón deshabilitado');
+                        e.preventDefault();
                         return false;
                     }
                     
                     // Verificar límite de tamaño antes de enviar
                     if (getTotalSize() > MAX_TOTAL_SIZE) {
                         alert('El tamaño total de archivos excede los 50MB. Por favor, elimina algunos archivos.');
+                        e.preventDefault();
                         return false;
                     }
                     
@@ -658,178 +676,26 @@
                     submitBtn.style.background = '#6c757d';
                     
                     console.log('✅ FEEDBACK VISUAL APLICADO: Usuario ve respuesta inmediata');
-                      try {
-                        const originalFormData = new FormData(this);
-                        
-                        // Preparar datos para enviar
-                        const data = {
-                            name: originalFormData.get('name'),
-                            phone: originalFormData.get('phone'),
-                            email: originalFormData.get('email'),
-                            message: originalFormData.get('message'),
-                            hasFiles: selectedFiles.length > 0,
-                            filesCount: selectedFiles.length,
-                            totalSize: getTotalSize()
-                        };
 
-                        // Si hay archivos, convertirlos a base64
-                        if (data.hasFiles) {
-                            console.log(`📎 ${selectedFiles.length} archivos detectados, tamaño total: ${formatFileSize(getTotalSize())}`);
-                            data.files = await convertMultipleFilesToBase64(selectedFiles);
-                            console.log('✅ Archivos convertidos a base64');
-                        }
-
-                        console.log('🚀 Enviando datos:', { 
-                            ...data, 
-                            files: data.files ? `${data.files.length} archivos (${formatFileSize(getTotalSize())})` : 'sin archivos' 
-                        });
-
-                        // Crear un formulario dinámico
-                        const tempForm = document.createElement('form');
-                        tempForm.method = 'POST';
-                        tempForm.target = 'hidden_iframe';
-                        tempForm.action = 'https://script.google.com/macros/s/AKfycbxNJNNyushdVXq3sWauZNyrQ96amjEEx_iYeN8ESCQB3ysGtJ4GxbvInj2f7NiqgrDgjA/exec';
+                    // FormSubmit manejará el envío automáticamente
+                    // Después de 3 segundos, mostrar mensaje de éxito
+                    setTimeout(() => {
+                        // Mostrar estado de éxito permanentemente (NO LIBERAR CONTROLES)
+                        submitBtn.disabled = true; // MANTENER DESHABILITADO
+                        submitBtn.className = 'btn-success';
+                        submitBtn.innerHTML = '✅ ¡Enviado con éxito!';
+                        submitBtn.style.background = '#28a745';
                         
-                        // Crear iframe oculto
-                        let hiddenIframe = document.getElementById('hidden_iframe');
-                        if (!hiddenIframe) {
-                            hiddenIframe = document.createElement('iframe');
-                            hiddenIframe.name = 'hidden_iframe';
-                            hiddenIframe.id = 'hidden_iframe';
-                            hiddenIframe.style.display = 'none';
-                            document.body.appendChild(hiddenIframe);
-                        }
-                        
-                        // Agregar los datos como campos del formulario
-                        Object.keys(data).forEach(key => {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = key;
-                            input.value = typeof data[key] === 'object' ? JSON.stringify(data[key]) : data[key];
-                            tempForm.appendChild(input);
-                        });
-                        
-                        // Agregar el formulario al DOM
-                        document.body.appendChild(tempForm);
-                        
-                        // Configurar timeout y manejo de respuesta
-                        let responseReceived = false;
-                        const successTimeout = setTimeout(() => {
-                            if (!responseReceived) {
-                                console.log('⏰ Timeout - Asumiendo éxito');
-                                responseReceived = true;
-                                
-                                // Limpiar
-                                if (document.body.contains(tempForm)) {
-                                    document.body.removeChild(tempForm);
-                                }
-                                
-                                // Mostrar estado de éxito permanentemente (NO LIBERAR CONTROLES)
-                                submitBtn.disabled = true; // MANTENER DESHABILITADO
-                                submitBtn.className = 'btn-success';
-                                submitBtn.innerHTML = '✅ ¡Enviado con éxito!';
-                                submitBtn.style.background = '#28a745';
-                                  // Mostrar mensaje de éxito
-                                successMsg.style.display = 'block';
-                                successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                
-                                // Limpiar formulario
-                                form.reset();
-                                selectedFiles = [];
-                                updateFilesDisplay();
-                                
-                                // Ocultar mensaje después de 10 segundos
-                                setTimeout(() => {
-                                    successMsg.style.display = 'none';
-                                }, 10000);
-                            }
-                        }, 8000); // 8 segundos de timeout
-                        
-                        // Configurar el evento onload del iframe
-                        hiddenIframe.onload = function() {
-                            console.log('✅ Envío completado exitosamente');
-                            if (!responseReceived) {
-                                responseReceived = true;
-                                clearTimeout(successTimeout);
-                                console.log('✅ Respuesta recibida del iframe');
-                                
-                                // Limpiar
-                                if (document.body.contains(tempForm)) {
-                                    document.body.removeChild(tempForm);
-                                }
-                                
-                                // Mostrar estado de éxito permanentemente (NO LIBERAR CONTROLES)
-                                submitBtn.disabled = true; // MANTENER DESHABILITADO
-                                submitBtn.className = 'btn-success';
-                                submitBtn.innerHTML = '✅ ¡Enviado con éxito!';
-                                submitBtn.style.background = '#28a745';
-                                
-                                // Mostrar mensaje de éxito
-                                successMsg.style.display = 'block';
-                                successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                  // Limpiar formulario
-                                form.reset();
-                                selectedFiles = [];
-                                updateFilesDisplay();
-                                
-                                // Ocultar mensaje después de 10 segundos
-                                setTimeout(() => {
-                                    successMsg.style.display = 'none';
-                                }, 10000);
-                            }
-                        };
-                        
-                        // Enviar formulario
-                        tempForm.submit();
-                        console.log('📤 Formulario enviado');
-                        
-                    } catch (error) {
-                        console.error('🚨 Error completo:', error);
-                        
-                        let errorMessage = 'Hubo un problema al enviar el mensaje';
-                        let technicalDetails = error.message;
-                        
-                        // Mejorar el mensaje de error según el tipo
-                        if (error.name === 'AbortError') {
-                            errorMessage = 'El envío tomó demasiado tiempo y se canceló automáticamente.';
-                            technicalDetails = 'Timeout después de 30 segundos';
-                        } else if (error.message.includes('network') || error.message.includes('fetch')) {
-                            errorMessage = 'Problemas de conexión a internet. Verifica tu conexión e intenta de nuevo.';
-                            technicalDetails = 'Error de red';
-                        } else if (error.message.includes('timeout')) {
-                            errorMessage = 'El envío tomó demasiado tiempo. Si enviaste un archivo grande, puede que aún se esté procesando.';
-                            technicalDetails = 'Request timeout';
-                        }
-                        
-                        // Mostrar mensaje de error detallado con más opciones
-                        errorMsg.innerHTML = `
-                            <strong>${errorMessage}</strong><br>
-                            <small>Detalles técnicos: ${technicalDetails}</small><br><br>
-                            <strong>Opciones:</strong><br>
-                            <button class="fallback-button" onclick="window.open('mailto:impretam3d@gmail.com?subject=Contacto desde web&body=Nombre: [Tu nombre]%0ATelefono: [Tu telefono]%0AEmail: [Tu email]%0AMensaje: [Tu mensaje]', '_blank')">
-                                📧 Enviar por email directo
-                            </button>
+                        // Mostrar mensaje de éxito
+                        successMsg.style.display = 'block';
+                        successMsg.innerHTML = `
+                            <strong>¡Mensaje enviado correctamente!</strong><br>
+                            Gracias por contactarnos. Nos pondremos en contacto contigo pronto.<br>
+                            ${selectedFiles.length > 0 ? `<small>Se han adjuntado ${selectedFiles.length} archivo(s).</small>` : ''}
                         `;
+                        successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         
-                        // En caso de error, liberar solo isSubmitting para permitir reintento
-                        isSubmitting = false;
-                        formAlreadySubmitted = false; // Permitir reintento en caso de error
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalButtonText;
-                        submitBtn.className = '';
-                        submitBtn.style.background = '#1a7f37';
-                        
-                        errorMsg.style.display = 'block';
-                        errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        
-                        // Ocultar mensaje de error después de 20 segundos
-                        setTimeout(() => {
-                            errorMsg.style.display = 'none';
-                        }, 20000);
-                    }
-                    
-                    // NOTA: NO hay bloque finally que libere los controles
-                    // Esto es intencional para evitar spam
+                    }, 3000);
                 });
             </script>
         </div>
@@ -870,20 +736,25 @@
         </div>
     </div>
 
+    <!-- WhatsApp Floating Button -->
+    <a href="#" class="whatsapp-button" onclick="createWhatsAppPopup(); return false;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </a>
+
     <div class="footer">
-        <p>&copy; 2024 Impretam 3D. Todos los derechos reservados. | <a href="terms.html" style="color: #fff;">Términos y Condiciones</a></p>
+        &copy; 2025 Impretam 3D | <a href="terms.html" style="color: #fff; text-decoration: none;">Términos y Condiciones</a>
     </div>
 
-    <!-- WhatsApp Widget -->
-    <div id="whatsapp-widget" class="whatsapp-widget">
-        <a href="https://wa.me/1234567890?text=¡Hola! Me interesa conocer más sobre sus servicios de impresión 3D." 
-           target="_blank" 
-           class="whatsapp-button"
-           title="Contáctanos por WhatsApp">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
-                 alt="WhatsApp" 
-                 class="whatsapp-icon">
-        </a>
-    </div>
+    <script src="js/whatsapp.min.js" async></script>
+    <script>
+        // Cargar el fondo guardado al cargar la página
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedBg = localStorage.getItem('contactoBackground');
+            if (savedBg) {
+                const heroSection = document.querySelector('.contact-hero');
+                heroSection.style.background = `linear-gradient(rgba(10, 42, 102, 0.7), rgba(10, 42, 102, 0.7)), url('${savedBg}') center/cover`;
+            }
+        });
+    </script>
 </body>
 </html>

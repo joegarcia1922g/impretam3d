@@ -12,7 +12,7 @@
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
         .header { background: #0a2a66; color: #fff; padding: 20px; display: flex; align-items: center; }
-        .logo { font-size: 2.5em; font-weight: bold; margin-right: 20px; cursor: pointer; }
+        .logo { font-size: 2.5em; font-weight: bold; margin-right: 20px; }
         .nav { margin-left: auto; }
         .nav a { color: #fff; text-decoration: none; margin: 0 10px; font-size: 1.1em; }
         .footer { background: #0a2a66; color: #fff; text-align: center; padding: 15px 0; position: fixed; width: 100%; bottom: 0; }
@@ -119,34 +119,6 @@
             pointer-events: none !important;
             opacity: 0.6 !important;
             transform: none !important;
-        }
-
-        /* Botón con estado de carga */
-        .btn-loading {
-            background: #6c757d !important;
-            cursor: not-allowed !important;
-        }
-
-        /* Botón con estado de éxito */
-        .btn-success {
-            background: #28a745 !important;
-        }
-
-        /* Spinner de carga */
-        .loading-spinner {
-            width: 16px;
-            height: 16px;
-            border: 2px solid #ffffff;
-            border-top: 2px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-right: 8px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         /* Estilos para el campo de archivo */
@@ -307,50 +279,16 @@
         }
         
         .hours {
-            color: #666;
-            font-size: 0.9em;
+            color: #1a7f37;
         }
 
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border: 1px solid #c3e6cb;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border: 1px solid #f5c6cb;
-            text-align: center;
-        }
-
-        .fallback-button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .fallback-button:hover {
-            background: #0056b3;
-        }
-
-        /* Animaciones */
         @keyframes slideDown {
             from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
@@ -359,57 +297,95 @@
             to { opacity: 1; }
         }
 
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        /* Success message styling */
+        .success-message {
+            background: #1a7f37;
+            color: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: center;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .contact-container {
-                flex-direction: column;
-                margin: -30px auto 80px;
+        .error-message {
+            background: #dc3545;
+            color: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .fallback-button {
+            background: white !important;
+            color: #dc3545 !important;
+            margin-top: 10px;
+            border: 2px solid white !important;
+        }
+
+        .fallback-button:hover {
+            background: #f8f9fa !important;
+            transform: none !important;
+        }
+
+        /* Estilos para botón de carga */
+        .btn-loading {
+            background: #6c757d !important;
+            cursor: not-allowed !important;
+            position: relative;
+        }
+
+        .btn-loading:hover {
+            background: #6c757d !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Spinner de carga */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { 
+                transform: rotate(360deg); 
             }
-            
-            .contact-info {
-                margin-left: 0;
-                margin-top: 30px;
-                width: auto;
-            }
-            
-            .contact-hero h1 {
-                font-size: 2.5em;
-            }
-            
-            .header {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .nav {
-                margin-left: 0;
-                margin-top: 15px;
-            }
+        }
+
+        /* Estados del botón */
+        .btn-success {
+            background: #28a745 !important;
+        }
+
+        .btn-success:hover {
+            background: #28a745 !important;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="logo" onclick="window.location.href='index.html'">Impretam 3D</div>
-        <div class="nav">
+        <a href="index.html" class="logo" style="color: inherit; text-decoration: none;">Impretam 3D</a>
+        <nav class="nav">
             <a href="index.html">Inicio</a>
             <a href="servicios.html">Servicios</a>
-            <a href="productos.html">Productos</a>
             <a href="contacto.html">Contacto</a>
-        </div>
+        </nav>
     </div>
 
-    <div class="contact-hero">
+    <section class="contact-hero">
         <div>
             <h1>Contáctanos</h1>
-            <p>Estamos aquí para ayudarte con tus proyectos de impresión 3D. Envíanos tu consulta y te responderemos lo antes posible.</p>
+            <p>Estamos aquí para ayudarte a hacer realidad tus proyectos. ¿Tienes alguna pregunta? ¡Escríbenos!</p>
         </div>
-    </div>
+    </section>
 
     <div class="contact-container">
         <div class="contact-form">
@@ -518,7 +494,7 @@
                     filesList.style.display = 'block';
                     fileInfo.style.display = 'none';
 
-                    // Deshabilitar submit si excede el límite (solo si no se ha enviado ya)
+                    // Deshabilitar submit si excede el límite
                     if (!formAlreadySubmitted) {
                         submitBtn.disabled = isOverLimit;
                         if (isOverLimit) {
@@ -658,15 +634,16 @@
                     submitBtn.style.background = '#6c757d';
                     
                     console.log('✅ FEEDBACK VISUAL APLICADO: Usuario ve respuesta inmediata');
-                      try {
-                        const originalFormData = new FormData(this);
+
+                    try {
+                        const formData = new FormData(this);
                         
                         // Preparar datos para enviar
                         const data = {
-                            name: originalFormData.get('name'),
-                            phone: originalFormData.get('phone'),
-                            email: originalFormData.get('email'),
-                            message: originalFormData.get('message'),
+                            name: formData.get('name'),
+                            phone: formData.get('phone'),
+                            email: formData.get('email'),
+                            message: formData.get('message'),
                             hasFiles: selectedFiles.length > 0,
                             filesCount: selectedFiles.length,
                             totalSize: getTotalSize()
@@ -684,11 +661,14 @@
                             files: data.files ? `${data.files.length} archivos (${formatFileSize(getTotalSize())})` : 'sin archivos' 
                         });
 
+                        // Usar un formulario HTML tradicional con iframe oculto
+                        console.log('🔄 Enviando formulario...');
+                        
                         // Crear un formulario dinámico
                         const tempForm = document.createElement('form');
                         tempForm.method = 'POST';
                         tempForm.target = 'hidden_iframe';
-                        tempForm.action = 'https://script.google.com/macros/s/AKfycbxNJNNyushdVXq3sWauZNyrQ96amjEEx_iYeN8ESCQB3ysGtJ4GxbvInj2f7NiqgrDgjA/exec';
+                        tempForm.action = 'https://script.google.com/macros/s/AKfycbxEv0yZ_QuHC-cYeFBHYsfM7RCLndgsgkzFHtb-mf1D1NfIaM-qCwqAbjbw7Ly0Q1H9/exec';
                         
                         // Crear iframe oculto
                         let hiddenIframe = document.getElementById('hidden_iframe');
@@ -714,10 +694,11 @@
                         
                         // Configurar timeout y manejo de respuesta
                         let responseReceived = false;
+                        
                         const successTimeout = setTimeout(() => {
                             if (!responseReceived) {
-                                console.log('⏰ Timeout - Asumiendo éxito');
                                 responseReceived = true;
+                                console.log('🎉 Timeout alcanzado - asumiendo éxito');
                                 
                                 // Limpiar
                                 if (document.body.contains(tempForm)) {
@@ -729,25 +710,24 @@
                                 submitBtn.className = 'btn-success';
                                 submitBtn.innerHTML = '✅ ¡Enviado con éxito!';
                                 submitBtn.style.background = '#28a745';
-                                  // Mostrar mensaje de éxito
+                                
+                                // Mostrar mensaje de éxito
                                 successMsg.style.display = 'block';
                                 successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                 
                                 // Limpiar formulario
                                 form.reset();
-                                selectedFiles = [];
-                                updateFilesDisplay();
+                                removeAllFiles();
                                 
                                 // Ocultar mensaje después de 10 segundos
                                 setTimeout(() => {
                                     successMsg.style.display = 'none';
                                 }, 10000);
                             }
-                        }, 8000); // 8 segundos de timeout
+                        }, 10000); // 10 segundos de timeout
                         
-                        // Configurar el evento onload del iframe
+                        // Manejar respuesta del iframe
                         hiddenIframe.onload = function() {
-                            console.log('✅ Envío completado exitosamente');
                             if (!responseReceived) {
                                 responseReceived = true;
                                 clearTimeout(successTimeout);
@@ -767,10 +747,10 @@
                                 // Mostrar mensaje de éxito
                                 successMsg.style.display = 'block';
                                 successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                  // Limpiar formulario
+                                
+                                // Limpiar formulario
                                 form.reset();
-                                selectedFiles = [];
-                                updateFilesDisplay();
+                                removeAllFiles();
                                 
                                 // Ocultar mensaje después de 10 segundos
                                 setTimeout(() => {
@@ -793,9 +773,15 @@
                         if (error.name === 'AbortError') {
                             errorMessage = 'El envío tomó demasiado tiempo y se canceló automáticamente.';
                             technicalDetails = 'Timeout después de 30 segundos';
-                        } else if (error.message.includes('network') || error.message.includes('fetch')) {
-                            errorMessage = 'Problemas de conexión a internet. Verifica tu conexión e intenta de nuevo.';
-                            technicalDetails = 'Error de red';
+                        } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                            errorMessage = 'Error de conexión. El servidor Google Apps Script no responde.';
+                            technicalDetails = 'Failed to fetch - Problema de red o CORS';
+                        } else if (error.message.includes('Failed to fetch')) {
+                            errorMessage = 'No se pudo conectar con el servidor. Posibles causas: Google Apps Script no está activo, problema de permisos, o conexión bloqueada.';
+                            technicalDetails = 'Failed to fetch - Verificar implementación de Google Apps Script';
+                        } else if (error.message.includes('CORS')) {
+                            errorMessage = 'Error de seguridad del navegador (CORS). El Google Apps Script necesita permisos adicionales.';
+                            technicalDetails = 'CORS policy error';
                         } else if (error.message.includes('timeout')) {
                             errorMessage = 'El envío tomó demasiado tiempo. Si enviaste un archivo grande, puede que aún se esté procesando.';
                             technicalDetails = 'Request timeout';
@@ -846,44 +832,50 @@
                         <span class="days">Sábados</span>
                         <span class="hours">9:00 AM - 2:00 PM</span>
                     </div>
-                    <div class="schedule-item">
-                        <span class="days">Domingos</span>
-                        <span class="hours">Cerrado</span>
-                    </div>
                 </div>
             </div>
             
             <div class="info-item">
-                <h3>Información de Contacto</h3>
-                <p><strong>Email:</strong> impretam3d@gmail.com</p>
-                <p><strong>Teléfono:</strong> +1 234 567 8900</p>
-                <p><strong>Dirección:</strong> Calle Principal 123, Ciudad</p>
+                <h3>Respuesta Rápida</h3>
+                <p>Te respondemos en menos de 24 horas para comenzar con tu proyecto.</p>
             </div>
-            
+
             <div class="info-item">
-                <h3>Servicios Principales</h3>
-                <p>• Impresión 3D personalizada</p>
-                <p>• Prototipado rápido</p>
-                <p>• Diseño asistido por computadora</p>
-                <p>• Consultoría técnica</p>
+                <h3>Envíos</h3>
+                <div class="schedule">
+                    <div class="schedule-item">
+                        <span class="days">Envíos a toda la República</span>
+                        <span class="hours">Servicio de paquetería seguro</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="footer">
-        <p>&copy; 2024 Impretam 3D. Todos los derechos reservados. | <a href="terms.html" style="color: #fff;">Términos y Condiciones</a></p>
+        <div style="margin-bottom: 10px;">
+            <a href="terms.html" style="color: white; text-decoration: none; margin: 0 10px;">Términos y Condiciones</a>
+        </div>
+        &copy; 2025 Impretam 3D
     </div>
 
-    <!-- WhatsApp Widget -->
-    <div id="whatsapp-widget" class="whatsapp-widget">
-        <a href="https://wa.me/1234567890?text=¡Hola! Me interesa conocer más sobre sus servicios de impresión 3D." 
-           target="_blank" 
-           class="whatsapp-button"
-           title="Contáctanos por WhatsApp">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
-                 alt="WhatsApp" 
-                 class="whatsapp-icon">
-        </a>
-    </div>
+    <!-- WhatsApp Floating Button -->
+    <a href="#" class="whatsapp-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </a>
+
+    <script src="js/whatsapp.min.js" async></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactHero = document.querySelector('.contact-hero');
+            if (contactHero) {
+                const savedBg = localStorage.getItem('contactoBackground');
+                if (savedBg) {
+                    contactHero.style.backgroundImage = `linear-gradient(rgba(10, 42, 102, 0.9), rgba(10, 42, 102, 0.9)), url('${savedBg}')`;
+                }
+            }
+        });
+    </script>
 </body>
 </html>

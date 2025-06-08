@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Anti-Spam - Impretam 3D</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0a2a66;
+            text-align: center;
+        }
+        .test-instructions {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .test-button {
+            background: #1a7f37;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        .test-button:hover {
+            background: #1e9341;
+            transform: translateY(-2px);
+        }
+        .test-button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .blocked { background: #f8d7da; color: #721c24; }
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .btn-loading {
+            background: #6c757d !important;
+            cursor: not-allowed !important;
+        }
+        .btn-success {
+            background: #28a745 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🛡️ PRUEBA ANTI-SPAM</h1>
+        
+        <div class="test-instructions">
+            <h3>Instrucciones de Prueba:</h3>
+            <ol>
+                <li><strong>Haz click UNA vez</strong> en el botón "Simular Envío"</li>
+                <li><strong>Haz múltiples clicks rápidos</strong> para probar el anti-spam</li>
+                <li>Observa que solo el primer click es procesado</li>
+                <li>Los clicks adicionales son bloqueados inmediatamente</li>
+            </ol>
+        </div>
+
+        <div style="text-align: center;">
+            <button id="testBtn" class="test-button">🚀 Simular Envío de Formulario</button>
+            <button onclick="resetTest()" class="test-button" style="background: #dc3545;">🔄 Reiniciar Prueba</button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Variables de control anti-spam (igual que en contacto.html)
+        let isSubmitting = false;
+        let clickCount = 0;
+        let results = [];
+
+        const testBtn = document.getElementById('testBtn');
+        const resultsDiv = document.getElementById('results');
+
+        // Función de prueba que simula el envío del formulario
+        testBtn.addEventListener('click', async function() {
+            clickCount++;
+            
+            // PROTECCIÓN ANTI-SPAM MEJORADA: Control múltiple de envíos
+            if (isSubmitting || testBtn.disabled) {
+                console.log('🚫 SPAM BLOQUEADO: Envío ya en progreso, ignorando click adicional...');
+                addResult(`🚫 CLICK ${clickCount} BLOQUEADO - Anti-spam funcionando`, 'blocked');
+                return false;
+            }
+            
+            // Marcar inmediatamente como enviando
+            isSubmitting = true;
+            addResult(`✅ CLICK ${clickCount} ACEPTADO - Iniciando envío`, 'success');
+            
+            // RESPUESTA VISUAL INMEDIATA
+            testBtn.disabled = true;
+            const originalText = testBtn.textContent;
+            
+            // Aplicar estado de carga con spinner
+            testBtn.className = 'test-button btn-loading';
+            testBtn.innerHTML = '<span class="loading-spinner"></span>Enviando...';
+            
+            try {
+                // Simular proceso de envío (3 segundos)
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                // Simular éxito
+                addResult(`🎉 ENVÍO COMPLETADO EXITOSAMENTE`, 'success');
+                
+                // Mostrar estado de éxito
+                testBtn.className = 'test-button btn-success';
+                testBtn.innerHTML = '✅ ¡Enviado con éxito!';
+                
+                // Restaurar después de 2 segundos
+                setTimeout(() => {
+                    isSubmitting = false;
+                    testBtn.disabled = false;
+                    testBtn.innerHTML = originalText;
+                    testBtn.className = 'test-button';
+                    addResult(`🔄 Sistema listo para nuevo envío`, 'success');
+                }, 2000);
+                
+            } catch (error) {
+                // Restaurar en caso de error
+                isSubmitting = false;
+                testBtn.disabled = false;
+                testBtn.innerHTML = originalText;
+                testBtn.className = 'test-button';
+                addResult(`❌ Error en envío - Control liberado`, 'blocked');
+            }
+        });
+
+        function addResult(message, type) {
+            const result = document.createElement('div');
+            result.className = `result ${type}`;
+            result.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            resultsDiv.appendChild(result);
+            result.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetTest() {
+            isSubmitting = false;
+            clickCount = 0;
+            testBtn.disabled = false;
+            testBtn.innerHTML = '🚀 Simular Envío de Formulario';
+            testBtn.className = 'test-button';
+            resultsDiv.innerHTML = '';
+        }
+
+        // Mostrar mensaje inicial
+        addResult('🚦 Sistema anti-spam inicializado - Listo para pruebas', 'success');
+    </script>
+</body>
+</html>
