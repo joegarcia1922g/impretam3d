@@ -1,0 +1,14 @@
+User-agent: *
+Disallow: /dashboard-i3d/
+Disallow: /js/admin-*
+Disallow: /*.bak$
+Disallow: /test-*
+
+# Allow all other content
+Allow: /
+
+# Sitemap location
+Sitemap: https://impretam3d.com/sitemap.xml
+
+# Crawl delay (optional)
+Crawl-delay: 1
