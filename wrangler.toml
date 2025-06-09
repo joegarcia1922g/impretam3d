@@ -4,8 +4,10 @@ workers_dev = true
 
 [env.production]
 name = "impretam3d"
-workers_dev = true
+workers_dev = false
 
 # Updated configuration for newer Wrangler
 pages_build_output_dir = "./"
 compatibility_date = "2025-05-29"
+
+main = "index.html"
