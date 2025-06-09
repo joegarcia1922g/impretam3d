@@ -752,13 +752,11 @@
                         console.log('🚀 Enviando datos:', { 
                             ...data, 
                             files: data.files ? `${data.files.length} archivos (${formatFileSize(getTotalSize())})` : 'sin archivos' 
-                        });
-
-                        // Crear un formulario dinámico
+                        });                        // Crear un formulario dinámico
                         const tempForm = document.createElement('form');
                         tempForm.method = 'POST';
                         tempForm.target = 'hidden_iframe';
-                        tempForm.action = 'https://script.google.com/macros/s/AKfycbxY0Xa58N3pHBQeQFxgtBn7SoGMPAHRqC7IXftdP-L9oTLDatj5xID6Pimv0Z7YzmduQg/exec';
+                        tempForm.action = 'https://script.google.com/macros/s/AKfycbwKduSAAburTPxZmW9k2iNbxrqRAYKFPZSSGajux5r2rk0ybBpLT7O3Jr-nZln1AU6Tow/exec';
                         
                         // Crear iframe oculto
                         let hiddenIframe = document.getElementById('hidden_iframe');
