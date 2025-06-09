@@ -6,6 +6,10 @@
 const ADMIN_EMAIL = 'impretam3d@gmail.com';
 const DEBUG_MODE = true; // Activar logs detallados
 
+// CONFIGURACIÓN DE LA COLA
+const SPREADSHEET_ID = 'TU_SPREADSHEET_ID'; // Reemplaza con el ID de tu hoja de cálculo
+const SHEET_NAME = 'ContactQueue';
+
 // Función de logging mejorada
 function debugLog(message, data = null) {
   const timestamp = new Date().toISOString();
@@ -36,65 +40,46 @@ function doGet(e) {
   return output;
 }
 
+// Función para inicializar la hoja de cálculo de la cola
+function initializeQueue() {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  let sheet = spreadsheet.getSheetByName(SHEET_NAME);
+
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(SHEET_NAME);
+    sheet.appendRow(['Timestamp', 'Name', 'Phone', 'Email', 'Message', 'Files']);
+    debugLog(`✅ Hoja de cola creada: ${SHEET_NAME}`);
+  } else {
+    debugLog(`✅ Hoja de cola ya existe: ${SHEET_NAME}`);
+  }
+}
+
+// Revisar y asegurar que cada solicitud se maneje de forma independiente
 function doPost(e) {
   const startTime = new Date();
   debugLog("🎯 doPost iniciado");
-  
+
   try {
-    // Verificar si e existe
     if (!e) {
       debugLog("❌ CRÍTICO: El objeto 'e' es undefined");
-      
-      // Email de debug inmediato
-      const debugEmailSubject = "🚨 CRÍTICO - doPost sin parámetros - Impretam 3D";
-      const debugEmailBody = `
-ALERTA CRÍTICA: El Google Apps Script fue llamado pero no recibió datos.
-
-Timestamp: ${startTime.toISOString()}
-Deployment URL: ${ScriptApp.getService().getUrl()}
-
-Posibles causas:
-1. Error en el deployment del script
-2. Problema CORS o headers HTTP  
-3. Error en el código del formulario
-
-ACCIÓN REQUERIDA: Verificar deployment y re-deployar si es necesario.
-      `;
-      
-      try {
-        GmailApp.sendEmail(ADMIN_EMAIL, debugEmailSubject, debugEmailBody);
-        debugLog("📧 Email de debug crítico enviado");
-      } catch (emailError) {
-        debugLog("❌ Error enviando email de debug", emailError);
-      }
-      
-      return ContentService
-        .createTextOutput(JSON.stringify({
-          success: false, 
-          error: "Objeto 'e' es undefined - problema crítico en deployment",
-          timestamp: startTime.toISOString()
-        }))
-        .setMimeType(ContentService.MimeType.JSON);
+      return ContentService.createTextOutput(JSON.stringify({
+        success: false,
+        error: "Objeto 'e' es undefined - problema crítico en deployment",
+        timestamp: startTime.toISOString()
+      })).setMimeType(ContentService.MimeType.JSON);
     }
-    
+
     debugLog("📨 Datos recibidos", {
       hasParameter: !!e.parameter,
       parameterKeys: e.parameter ? Object.keys(e.parameter) : [],
       hasPostData: !!e.postData,
       postDataType: e.postData ? e.postData.type : null
     });
-    
+
     let data;
-    
-    // Extraer datos del formulario
     if (e.parameter && Object.keys(e.parameter).length > 0) {
       data = e.parameter;
-      debugLog("✅ Usando datos de parámetros de formulario");
-      
-      // Convertir hasFiles de string a boolean
       data.hasFiles = data.hasFiles === 'true';
-      
-      // Convertir archivos de string a array si existe
       if (data.files && typeof data.files === 'string') {
         try {
           data.files = JSON.parse(data.files);
@@ -105,8 +90,6 @@ ACCIÓN REQUERIDA: Verificar deployment y re-deployar si es necesario.
           data.files = [];
         }
       }
-      
-      // Asegurar que files sea un array
       if (!Array.isArray(data.files)) {
         data.files = [];
         data.hasFiles = false;
@@ -124,155 +107,103 @@ ACCIÓN REQUERIDA: Verificar deployment y re-deployar si es necesario.
       data = {
         name: "Usuario Debug",
         phone: "Sin teléfono",
-        email: "debug@test.com", 
+        email: "debug@test.com",
         message: "Mensaje de debug - no se recibieron datos válidos",
         hasFiles: false,
         files: []
       };
     }
-    
+
     debugLog("📋 Datos extraídos", data);
-    
-    // ENVIAR EMAIL INMEDIATAMENTE (antes de procesar archivos)
-    debugLog("📧 Iniciando envío de email de notificación");
-    
-    const hasFiles = data.hasFiles && data.files && data.files.length > 0;
-    const emailSubject = `🔔 NUEVO CONTACTO: ${data.name} - Impretam 3D${hasFiles ? ` (${data.files.length} archivo(s))` : ''}`;
-    
-    let filesPreview = '';
-    if (hasFiles) {
-      const totalSize = data.files.reduce((sum, file) => sum + file.size, 0);
-      filesPreview = `\n📎 Archivos adjuntos: ${data.files.length} archivo(s), ${(totalSize / 1024 / 1024).toFixed(2)} MB total\n`;
-      data.files.forEach((file, index) => {
-        filesPreview += `${index + 1}. ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)\n`;
-      });
-      filesPreview += `\n📋 NOTA: Los archivos se están procesando y se enviarán en un email separado.\n`;
-    }
-    
-    const emailBody = `
-¡NUEVO MENSAJE DE CONTACTO RECIBIDO!
 
-===================================
-DATOS DEL CONTACTO:
-===================================
-👤 Nombre: ${data.name}
-📞 Teléfono: ${data.phone || 'No proporcionado'}
-📧 Email: ${data.email}
+    // Guardar en la cola
+    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheet = spreadsheet.getSheetByName(SHEET_NAME);
+    sheet.appendRow([
+      new Date().toISOString(),
+      data.name,
+      data.phone,
+      data.email,
+      data.message,
+      JSON.stringify(data.files)
+    ]);
 
-💬 Mensaje:
-${data.message}
+    debugLog("✅ Datos almacenados en la cola");
 
-${filesPreview}
-===================================
-INFORMACIÓN TÉCNICA:
-===================================
-⏰ Recibido: ${new Date().toLocaleString('es-ES')}
-🌐 Sistema: Google Apps Script v2.4-DEBUG
-🆔 Script URL: ${ScriptApp.getService().getUrl()}
-    `;
-    
-    try {
-      GmailApp.sendEmail(ADMIN_EMAIL, emailSubject, emailBody);
-      debugLog("✅ Email de notificación enviado exitosamente");
-    } catch (emailError) {
-      debugLog("❌ ERROR CRÍTICO enviando email", emailError);
-      
-      // Intentar envío de emergencia con subject simple
-      try {
-        GmailApp.sendEmail(
-          ADMIN_EMAIL, 
-          `Contacto: ${data.name}`,
-          `Nuevo contacto de ${data.name} (${data.email}): ${data.message}`
-        );
-        debugLog("✅ Email de emergencia enviado");
-      } catch (emergencyError) {
-        debugLog("❌ ERROR CRÍTICO: No se pudo enviar ningún email", emergencyError);
-        throw new Error("No se pudo enviar email: " + emailError.toString());
-      }
-    }
-    
-    // Procesar archivos si existen
-    let fileResults = { processed: 0, successful: 0, failed: 0, details: [] };
-    if (hasFiles) {
-      debugLog("📁 Iniciando procesamiento de archivos");
-      fileResults = processFiles(data);
-      debugLog("📁 Procesamiento completado", fileResults);
-      
-      // Enviar email con detalles de archivos
-      if (fileResults.successful > 0) {
-        sendFilesEmail(data, fileResults);
-      }
-    }
-    
-    const endTime = new Date();
-    const processingTime = endTime - startTime;
-    
-    debugLog("✅ doPost completado", {
-      processingTimeMs: processingTime,
-      emailSent: true,
-      filesProcessed: fileResults.processed
-    });
-    
-    return ContentService
-      .createTextOutput(JSON.stringify({
-        success: true, 
-        message: 'Mensaje enviado correctamente',
-        timestamp: endTime.toISOString(),
-        processingTimeMs: processingTime,
-        emailSent: true,
-        filesProcessed: fileResults.processed,
-        debug: DEBUG_MODE ? "Debug mode active" : "Production mode"
-      }))
-      .setMimeType(ContentService.MimeType.JSON);
-      
+    return ContentService.createTextOutput(JSON.stringify({
+      success: true,
+      message: 'Datos almacenados en la cola',
+      timestamp: new Date().toISOString()
+    })).setMimeType(ContentService.MimeType.JSON);
+
   } catch (error) {
     debugLog("❌ Error crítico en doPost", error);
-    
-    // Email de error crítico
-    try {
-      GmailApp.sendEmail(
-        ADMIN_EMAIL,
-        "🚨 ERROR CRÍTICO - Google Apps Script - Impretam 3D",
-        `Error crítico en el procesamiento del formulario:
-
-Error: ${error.toString()}
-Stack: ${error.stack}
-Timestamp: ${new Date().toISOString()}
-Script URL: ${ScriptApp.getService().getUrl()}
-
-Los usuarios pueden estar experimentando problemas para enviar formularios.
-`
-      );
-    } catch (emailError) {
-      debugLog("❌ Error enviando notificación de error", emailError);
-    }
-    
-    return ContentService
-      .createTextOutput(JSON.stringify({
-        success: false, 
-        error: error.toString(),
-        timestamp: new Date().toISOString()
-      }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: error.toString(),
+      timestamp: new Date().toISOString()
+    })).setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+// Función para procesar la cola
+function processQueue() {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = spreadsheet.getSheetByName(SHEET_NAME);
+  const rows = sheet.getDataRange().getValues();
+
+  if (rows.length <= 1) {
+    debugLog("📭 La cola está vacía");
+    return;
+  }
+
+  for (let i = 1; i < rows.length; i++) {
+    const [timestamp, name, phone, email, message, files] = rows[i];
+
+    try {
+      const emailSubject = `🔔 NUEVO CONTACTO: ${name} - Impretam 3D`;
+      const emailBody = `
+        Nombre: ${name}
+        Teléfono: ${phone}
+        Email: ${email}
+        Mensaje: ${message}
+        Archivos: ${files}
+      `;
+
+      GmailApp.sendEmail(ADMIN_EMAIL, emailSubject, emailBody);
+      debugLog(`✅ Email enviado para ${name}`);
+
+    } catch (error) {
+      debugLog(`❌ Error enviando email para ${name}`, error);
+    }
+  }
+
+  // Limpiar la cola
+  sheet.deleteRows(2, rows.length - 1);
+  debugLog("✅ Cola procesada y limpiada");
 }
 
 // Función para procesar archivos (misma lógica que tienes)
 function processFiles(data) {
   debugLog("📁 Procesando archivos adjuntos");
-  
+
   const results = { processed: 0, successful: 0, failed: 0, details: [], totalSize: 0 };
-  
+
   try {
     const totalSize = data.files.reduce((sum, file) => sum + file.size, 0);
     results.totalSize = totalSize;
     debugLog(`📊 Tamaño total: ${(totalSize / 1024 / 1024).toFixed(2)} MB`);
     
+    // Validar tamaño total
+    if (totalSize > 50 * 1024 * 1024) {
+      throw new Error("El tamaño total de los archivos excede el límite de 50MB.");
+    }
+
     // Buscar o crear carpeta
     let folder;
     const folderName = "Impretam3D_Contactos";
     const folders = DriveApp.getFoldersByName(folderName);
-    
+
     if (folders.hasNext()) {
       folder = folders.next();
       debugLog("📂 Usando carpeta existente:", folderName);
@@ -280,40 +211,45 @@ function processFiles(data) {
       folder = DriveApp.createFolder(folderName);
       debugLog("📂 Carpeta creada:", folderName);
     }
-    
-    // Procesar cada archivo (tu lógica existente)
+
+    // Procesar cada archivo
     for (let i = 0; i < data.files.length; i++) {
       const file = data.files[i];
       results.processed++;
-      
+
       try {
         debugLog(`📎 Procesando archivo ${i + 1}/${data.files.length}: ${file.name}`);
-        
-        // Detectar tipo y extensión (tu código)
+
+        // Validar tamaño individual
+        if (file.size > 50 * 1024 * 1024) {
+          throw new Error(`El archivo "${file.name}" excede el límite de 50MB.`);
+        }
+
+        // Detectar tipo y extensión
         const fileName = file.name.toLowerCase();
         const hasValidExtension = fileName.includes('.') && fileName.lastIndexOf('.') > 0;
-        
+
         if (!hasValidExtension) {
-          throw new Error(`El archivo "${file.name}" no tiene una extensión válida`);
+          throw new Error(`El archivo "${file.name}" no tiene una extensión válida.`);
         }
-        
+
         // Crear nombre para Drive
         const originalName = file.name;
         const baseName = originalName.substring(0, originalName.lastIndexOf('.'));
         const extension = originalName.substring(originalName.lastIndexOf('.'));
         const timestamp = new Date().toISOString().slice(0,10).replace(/-/g, '');
         const driveFileName = `${baseName}_${data.name}_${timestamp}_${i + 1}${extension}`;
-        
+
         // Crear archivo
         const fileBlob = Utilities.newBlob(
           Utilities.base64Decode(file.content), 
           file.type || 'application/octet-stream', 
           driveFileName
         );
-        
+
         const driveFile = folder.createFile(fileBlob);
         driveFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-        
+
         results.successful++;
         results.details.push({
           name: file.name,
@@ -322,9 +258,9 @@ function processFiles(data) {
           driveFileName: driveFile.getName(),
           status: 'success'
         });
-        
+
         debugLog(`✅ Archivo subido: ${driveFile.getName()}`);
-        
+
       } catch (fileError) {
         debugLog(`❌ Error procesando archivo ${file.name}`, fileError);
         results.failed++;
@@ -336,67 +272,57 @@ function processFiles(data) {
         });
       }
     }
-    
+
     return results;
-    
+
   } catch (error) {
     debugLog("❌ Error general procesando archivos", error);
     throw error;
   }
 }
 
-// Función para enviar email con archivos
-function sendFilesEmail(data, fileResults) {
-  debugLog("📎 Enviando email con detalles de archivos");
-  
-  try {
-    const subject = `📎 ARCHIVOS PROCESADOS: ${data.name} - Impretam 3D`;
-    
-    let filesSection = '';
-    if (fileResults.successful > 0) {
-      filesSection += '\n✅ ARCHIVOS SUBIDOS EXITOSAMENTE:\n';
-      fileResults.details
-        .filter(f => f.status === 'success')
-        .forEach((file, index) => {
-          filesSection += `${index + 1}. ${file.name}\n`;
-          filesSection += `   📁 Guardado como: ${file.driveFileName}\n`;
-          filesSection += `   📊 Tamaño: ${(file.size / 1024 / 1024).toFixed(2)} MB\n`;
-          filesSection += `   🔗 ${file.url}\n\n`;
-        });
-    }
-    
-    if (fileResults.failed > 0) {
-      filesSection += '\n❌ ARCHIVOS CON ERRORES:\n';
-      fileResults.details
-        .filter(f => f.status === 'error')
-        .forEach((file, index) => {
-          filesSection += `${index + 1}. ${file.name} - ${file.error}\n`;
-        });
-    }
-    
-    const body = `
-ARCHIVOS PROCESADOS PARA: ${data.name}
-
-===================================
-RESUMEN:
-===================================
-📊 Total procesados: ${fileResults.processed}
-✅ Exitosos: ${fileResults.successful}
-❌ Fallidos: ${fileResults.failed}
-📦 Tamaño total: ${(fileResults.totalSize / 1024 / 1024).toFixed(2)} MB
-
-${filesSection}
-
-===================================
-Este email complementa el mensaje de contacto recibido anteriormente.
-    `;
-    
-    GmailApp.sendEmail(ADMIN_EMAIL, subject, body);
-    debugLog("✅ Email de archivos enviado");
-    
-  } catch (error) {
-    debugLog("❌ Error enviando email de archivos", error);
+function getOrCreateFolder(folderName) {
+  const folders = DriveApp.getFoldersByName(folderName);
+  if (folders.hasNext()) {
+    debugLog("📂 Usando carpeta existente:", folderName);
+    return folders.next();
   }
+  debugLog("📂 Carpeta creada:", folderName);
+  return DriveApp.createFolder(folderName);
+}
+
+function validateFile(file) {
+  if (file.size > 50 * 1024 * 1024) {
+    throw new Error(`El archivo "${file.name}" excede el límite de 50MB.`);
+  }
+  if (!file.name.includes('.') || file.name.lastIndexOf('.') <= 0) {
+    throw new Error(`El archivo "${file.name}" no tiene una extensión válida.`);
+  }
+}
+
+function saveFileToDrive(file, folder, userName, index) {
+  const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const [baseName, extension] = file.name.split(/\.(?=[^\.]+$)/);
+  const driveFileName = `${baseName}_${userName}_${timestamp}_${index + 1}.${extension}`;
+  const fileBlob = Utilities.newBlob(
+    Utilities.base64Decode(file.content),
+    file.type || 'application/octet-stream',
+    driveFileName
+  );
+  const driveFile = folder.createFile(fileBlob);
+  driveFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  return driveFile;
+}
+
+function handleFileError(file, error, results) {
+  debugLog(`❌ Error procesando archivo ${file.name}`, error);
+  results.failed++;
+  results.details.push({
+    name: file.name,
+    size: file.size,
+    error: error.message,
+    status: 'error'
+  });
 }
 
 // Funciones de prueba (tus funciones existentes mejoradas)

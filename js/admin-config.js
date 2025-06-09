@@ -22,6 +22,31 @@ const ADMIN_CONFIG = {
     }
 };
 
+// Funciones para interactuar con Cloudflare KV
+async function saveToKV(key, value) {
+    try {
+        const response = await fetch('/kv', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key, value })
+        });
+        if (!response.ok) throw new Error('Error al guardar en KV');
+    } catch (error) {
+        console.error('Error al guardar en KV:', error);
+    }
+}
+
+async function loadFromKV(key) {
+    try {
+        const response = await fetch(`/kv?key=${key}`);
+        if (!response.ok) throw new Error('Error al cargar desde KV');
+        return await response.json();
+    } catch (error) {
+        console.error('Error al cargar desde KV:', error);
+        return null;
+    }
+}
+
 // Utility functions for admin panel
 const AdminUtils = {    
     validateLogin(username, password) {
