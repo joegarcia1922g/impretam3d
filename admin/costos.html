@@ -27,7 +27,7 @@
         <section class="page-title">
             <div>
                 <h1>Costos operativos</h1>
-                <p>Configura material, impresion, luz, mantenimiento, piezas por placa y margenes para cotizar con datos reales.</p>
+                <p>Configura material, horas, accesorios por pieza, IVA, comision, renta y margenes como en la hoja operativa.</p>
             </div>
             <button class="button" id="refreshCosts" type="button">Actualizar</button>
         </section>
@@ -60,6 +60,14 @@
                         <span>IVA (%)</span>
                         <input id="ivaPercent" type="number" min="0" step="0.01">
                     </label>
+                    <label class="field">
+                        <span>Comision bancaria (%)</span>
+                        <input id="bankCommissionPercent" type="number" min="0" step="0.01">
+                    </label>
+                    <label class="field">
+                        <span>Renta / overhead (%)</span>
+                        <input id="rentPercent" type="number" min="0" step="0.01">
+                    </label>
                     <label class="check-row">
                         <input id="includeIva" type="checkbox">
                         <span>Incluir IVA por default</span>
@@ -81,6 +89,36 @@
                 </ul>
                 <div id="catalogStatus" class="status"></div>
             </aside>
+
+            <form class="panel" id="accessoriesForm">
+                <h2>Accesorios por pieza</h2>
+                <div class="form-grid">
+                    <label class="field">
+                        <span>Tarjeta/pz</span>
+                        <input id="cardCostPerPiece" type="number" min="0" step="0.01">
+                    </label>
+                    <label class="field">
+                        <span>Argolla/pz</span>
+                        <input id="ringCostPerPiece" type="number" min="0" step="0.01">
+                    </label>
+                    <label class="field">
+                        <span>Bolsa/pz</span>
+                        <input id="bagCostPerPiece" type="number" min="0" step="0.01">
+                    </label>
+                    <label class="field">
+                        <span>Armella/pz</span>
+                        <input id="eyeletCostPerPiece" type="number" min="0" step="0.01">
+                    </label>
+                    <label class="field">
+                        <span>Iman/pz</span>
+                        <input id="magnetCostPerPiece" type="number" min="0" step="0.01">
+                    </label>
+                </div>
+                <div class="actions">
+                    <button class="button primary" type="submit">Guardar accesorios</button>
+                </div>
+                <div id="accessoriesStatus" class="status"></div>
+            </form>
 
             <section class="panel">
                 <div class="page-title compact">

@@ -7,10 +7,17 @@ const calculatorFields = [
     'hourlyCost',
     'energyCostPerHour',
     'maintenanceCostPerHour',
+    'cardCostPerPiece',
+    'ringCostPerPiece',
+    'bagCostPerPiece',
+    'eyeletCostPerPiece',
+    'magnetCostPerPiece',
     'piecesPerPlate',
     'marginPercent',
     'includeIva',
-    'ivaPercent'
+    'ivaPercent',
+    'bankCommissionPercent',
+    'rentPercent'
 ];
 
 const quoteFields = [
@@ -48,10 +55,17 @@ function readCalculatorConfig() {
         printCostPerHour,
         energyCostPerHour,
         maintenanceCostPerHour,
+        cardCostPerPiece: numberFromInput('cardCostPerPiece'),
+        ringCostPerPiece: numberFromInput('ringCostPerPiece'),
+        bagCostPerPiece: numberFromInput('bagCostPerPiece'),
+        eyeletCostPerPiece: numberFromInput('eyeletCostPerPiece'),
+        magnetCostPerPiece: numberFromInput('magnetCostPerPiece'),
         piecesPerPlate: integerFromInput('piecesPerPlate'),
         marginPercent: numberFromInput('marginPercent'),
         includeIva: document.getElementById('includeIva').checked,
-        ivaPercent: numberFromInput('ivaPercent')
+        ivaPercent: numberFromInput('ivaPercent'),
+        bankCommissionPercent: numberFromInput('bankCommissionPercent'),
+        rentPercent: numberFromInput('rentPercent')
     };
 }
 
@@ -62,10 +76,17 @@ function applyCalculatorConfig(config) {
     document.getElementById('hourlyCost').value = config.printCostPerHour ?? config.hourlyCost ?? 0;
     document.getElementById('energyCostPerHour').value = config.energyCostPerHour ?? 0;
     document.getElementById('maintenanceCostPerHour').value = config.maintenanceCostPerHour ?? 0;
+    document.getElementById('cardCostPerPiece').value = config.cardCostPerPiece ?? 0;
+    document.getElementById('ringCostPerPiece').value = config.ringCostPerPiece ?? 0;
+    document.getElementById('bagCostPerPiece').value = config.bagCostPerPiece ?? 0;
+    document.getElementById('eyeletCostPerPiece').value = config.eyeletCostPerPiece ?? 0;
+    document.getElementById('magnetCostPerPiece').value = config.magnetCostPerPiece ?? 0;
     document.getElementById('piecesPerPlate').value = config.piecesPerPlate || 1;
     document.getElementById('marginPercent').value = config.marginPercent ?? 0;
     document.getElementById('includeIva').checked = Boolean(config.includeIva);
     document.getElementById('ivaPercent').value = config.ivaPercent ?? 16;
+    document.getElementById('bankCommissionPercent').value = config.bankCommissionPercent ?? 0;
+    document.getElementById('rentPercent').value = config.rentPercent ?? 0;
 }
 
 function applyCostSettings(settings) {
@@ -76,9 +97,16 @@ function applyCostSettings(settings) {
     document.getElementById('hourlyCost').value = settings.printCostPerHour ?? numberFromInput('hourlyCost');
     document.getElementById('energyCostPerHour').value = settings.energyCostPerHour ?? numberFromInput('energyCostPerHour');
     document.getElementById('maintenanceCostPerHour').value = settings.maintenanceCostPerHour ?? numberFromInput('maintenanceCostPerHour');
+    document.getElementById('cardCostPerPiece').value = settings.cardCostPerPiece ?? numberFromInput('cardCostPerPiece');
+    document.getElementById('ringCostPerPiece').value = settings.ringCostPerPiece ?? numberFromInput('ringCostPerPiece');
+    document.getElementById('bagCostPerPiece').value = settings.bagCostPerPiece ?? numberFromInput('bagCostPerPiece');
+    document.getElementById('eyeletCostPerPiece').value = settings.eyeletCostPerPiece ?? numberFromInput('eyeletCostPerPiece');
+    document.getElementById('magnetCostPerPiece').value = settings.magnetCostPerPiece ?? numberFromInput('magnetCostPerPiece');
     document.getElementById('marginPercent').value = settings.defaultMarginPercent ?? numberFromInput('marginPercent');
     document.getElementById('includeIva').checked = Boolean(settings.includeIva);
     document.getElementById('ivaPercent').value = settings.ivaPercent ?? numberFromInput('ivaPercent');
+    document.getElementById('bankCommissionPercent').value = settings.bankCommissionPercent ?? numberFromInput('bankCommissionPercent');
+    document.getElementById('rentPercent').value = settings.rentPercent ?? numberFromInput('rentPercent');
 }
 
 function renderMaterialOptions(materials) {
@@ -148,31 +176,125 @@ function applySavedModel() {
     calculateQuote();
 }
 
+function roundMoney(value) {
+    return Math.round(((Number(value) || 0) + Number.EPSILON) * 100) / 100;
+}
+
+function buildPricingSuggestions(baseSubtotal, pieces, config) {
+    const tiers = costCatalog && Array.isArray(costCatalog.tiers) && costCatalog.tiers.length
+        ? costCatalog.tiers
+        : [{ code: 'manual', name: 'Margen manual', defaultMarkup: config.marginPercent }];
+
+    return tiers.map((tier) => {
+        const markupPercent = Number(tier.defaultMarkup) || 0;
+        const subtotal = roundMoney(baseSubtotal * (1 + (markupPercent / 100)));
+        const pricePerPiece = roundMoney(subtotal / pieces);
+        const ivaAmount = config.includeIva ? roundMoney(subtotal * (config.ivaPercent / 100)) : 0;
+        const withIva = roundMoney(subtotal + ivaAmount);
+        const bankCommissionAmount = roundMoney(withIva * (config.bankCommissionPercent / 100));
+        const withCommission = roundMoney(withIva + bankCommissionAmount);
+        const rentAmount = roundMoney(withCommission * (config.rentPercent / 100));
+        const withRent = roundMoney(withCommission + rentAmount);
+
+        return {
+            code: tier.code,
+            name: tier.name,
+            markupPercent,
+            subtotal,
+            pricePerPiece,
+            ivaAmount,
+            withIva,
+            withIvaPerPiece: roundMoney(withIva / pieces),
+            bankCommissionAmount,
+            withCommission,
+            withCommissionPerPiece: roundMoney(withCommission / pieces),
+            rentAmount,
+            withRent,
+            finalPricePerPiece: roundMoney(withRent / pieces)
+        };
+    });
+}
+
+function renderPricingSuggestions(rows) {
+    const container = document.getElementById('pricingSuggestions');
+    if (!rows.length) {
+        container.innerHTML = '<p class="empty-state">No hay margenes configurados.</p>';
+        return;
+    }
+
+    container.innerHTML = `
+        <table class="pricing-table">
+            <thead>
+                <tr>
+                    <th>Margen</th>
+                    <th>% Ganancia</th>
+                    <th>Precio/pz</th>
+                    <th>Con IVA</th>
+                    <th>Con comision</th>
+                    <th>Con renta</th>
+                    <th>Total lote</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows.map((row) => `
+                    <tr>
+                        <td>${escapeHtml(row.name)}</td>
+                        <td>${row.markupPercent}%</td>
+                        <td>${AdminStorage.money(row.pricePerPiece)}</td>
+                        <td>${AdminStorage.money(row.withIvaPerPiece)}</td>
+                        <td>${AdminStorage.money(row.withCommissionPerPiece)}</td>
+                        <td class="strong-price">${AdminStorage.money(row.finalPricePerPiece)}</td>
+                        <td class="strong-price">${AdminStorage.money(row.withRent)}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+}
+
 function calculateQuote() {
     const grams = numberFromInput('grams');
     const hours = numberFromInput('hours');
     const config = readCalculatorConfig();
+    const pieces = Math.max(config.piecesPerPlate, 1);
     const materialTotal = grams * config.materialCostPerGram;
     const printTotal = hours * config.printCostPerHour;
     const energyTotal = hours * config.energyCostPerHour;
     const maintenanceTotal = hours * config.maintenanceCostPerHour;
+    const cardTotal = pieces * config.cardCostPerPiece;
+    const ringTotal = pieces * config.ringCostPerPiece;
+    const bagTotal = pieces * config.bagCostPerPiece;
+    const eyeletTotal = pieces * config.eyeletCostPerPiece;
+    const magnetTotal = pieces * config.magnetCostPerPiece;
+    const accessoriesTotal = cardTotal + ringTotal + bagTotal + eyeletTotal + magnetTotal;
     const timeTotal = printTotal + energyTotal + maintenanceTotal;
-    const baseSubtotal = materialTotal + timeTotal;
-    const costPerPiece = baseSubtotal / Math.max(config.piecesPerPlate, 1);
+    const baseSubtotal = materialTotal + timeTotal + accessoriesTotal;
+    const costPerPiece = baseSubtotal / pieces;
     const marginAmount = baseSubtotal * (config.marginPercent / 100);
-    const subtotal = baseSubtotal + marginAmount;
-    const ivaAmount = config.includeIva ? subtotal * (config.ivaPercent / 100) : 0;
-    const finalPrice = subtotal + ivaAmount;
+    const priceBeforeAdjustments = baseSubtotal + marginAmount;
+    const ivaAmount = config.includeIva ? priceBeforeAdjustments * (config.ivaPercent / 100) : 0;
+    const priceWithIva = priceBeforeAdjustments + ivaAmount;
+    const bankCommissionAmount = priceWithIva * (config.bankCommissionPercent / 100);
+    const priceWithCommission = priceWithIva + bankCommissionAmount;
+    const rentAmount = priceWithCommission * (config.rentPercent / 100);
+    const finalPrice = priceWithCommission + rentAmount;
+    const finalPricePerPiece = finalPrice / pieces;
+    const pricingSuggestions = buildPricingSuggestions(baseSubtotal, pieces, config);
 
     document.getElementById('materialTotal').textContent = AdminStorage.money(materialTotal);
     document.getElementById('printTotal').textContent = AdminStorage.money(printTotal);
     document.getElementById('energyTotal').textContent = AdminStorage.money(energyTotal);
     document.getElementById('maintenanceTotal').textContent = AdminStorage.money(maintenanceTotal);
+    document.getElementById('accessoriesTotal').textContent = AdminStorage.money(accessoriesTotal);
     document.getElementById('baseSubtotal').textContent = AdminStorage.money(baseSubtotal);
     document.getElementById('costPerPiece').textContent = AdminStorage.money(costPerPiece);
     document.getElementById('marginAmount').textContent = AdminStorage.money(marginAmount);
     document.getElementById('ivaAmount').textContent = AdminStorage.money(ivaAmount);
+    document.getElementById('bankCommissionAmount').textContent = AdminStorage.money(bankCommissionAmount);
+    document.getElementById('rentAmount').textContent = AdminStorage.money(rentAmount);
+    document.getElementById('finalPricePerPiece').textContent = AdminStorage.money(finalPricePerPiece);
     document.getElementById('finalPrice').textContent = AdminStorage.money(finalPrice);
+    renderPricingSuggestions(pricingSuggestions);
 
     return {
         customerName: document.getElementById('customerName').value.trim(),
@@ -184,12 +306,25 @@ function calculateQuote() {
         printTotal,
         energyTotal,
         maintenanceTotal,
+        cardTotal,
+        ringTotal,
+        bagTotal,
+        eyeletTotal,
+        magnetTotal,
+        accessoriesTotal,
         costPerPlate: baseSubtotal,
         costPerPiece,
         baseSubtotal,
         marginAmount,
         ivaAmount,
+        priceBeforeAdjustments,
+        priceWithIva,
+        bankCommissionAmount,
+        priceWithCommission,
+        rentAmount,
         finalPrice,
+        finalPricePerPiece,
+        pricingSuggestions,
         notes: ''
     };
 }
@@ -235,10 +370,18 @@ async function copyQuote() {
         `Impresion: ${AdminStorage.money(quote.printTotal)}`,
         `Luz: ${AdminStorage.money(quote.energyTotal)}`,
         `Mantenimiento: ${AdminStorage.money(quote.maintenanceTotal)}`,
+        `Accesorios: ${AdminStorage.money(quote.accessoriesTotal)}`,
+        `Costo lote: ${AdminStorage.money(quote.baseSubtotal)}`,
         `Costo por pieza: ${AdminStorage.money(quote.costPerPiece)}`,
         `Margen: ${AdminStorage.money(quote.marginAmount)}`,
         `IVA: ${AdminStorage.money(quote.ivaAmount)}`,
-        `Precio sugerido: ${AdminStorage.money(quote.finalPrice)}`
+        `Comision bancaria: ${AdminStorage.money(quote.bankCommissionAmount)}`,
+        `Renta: ${AdminStorage.money(quote.rentAmount)}`,
+        `Precio sugerido por pieza: ${AdminStorage.money(quote.finalPricePerPiece)}`,
+        `Precio sugerido lote: ${AdminStorage.money(quote.finalPrice)}`,
+        '',
+        'Precios sugeridos:',
+        ...(quote.pricingSuggestions || []).map((row) => `${row.name} ${row.markupPercent}%: ${AdminStorage.money(row.finalPricePerPiece)}/pz | ${AdminStorage.money(row.withRent)} lote`)
     ].join('\n');
 
     try {
@@ -325,10 +468,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             printCostPerHour: costCatalog.settings.printCostPerHour,
             energyCostPerHour: costCatalog.settings.energyCostPerHour,
             maintenanceCostPerHour: costCatalog.settings.maintenanceCostPerHour,
+            cardCostPerPiece: costCatalog.settings.cardCostPerPiece,
+            ringCostPerPiece: costCatalog.settings.ringCostPerPiece,
+            bagCostPerPiece: costCatalog.settings.bagCostPerPiece,
+            eyeletCostPerPiece: costCatalog.settings.eyeletCostPerPiece,
+            magnetCostPerPiece: costCatalog.settings.magnetCostPerPiece,
             piecesPerPlate: 1,
             marginPercent: costCatalog.settings.defaultMarginPercent,
             includeIva: costCatalog.settings.includeIva,
-            ivaPercent: costCatalog.settings.ivaPercent
+            ivaPercent: costCatalog.settings.ivaPercent,
+            bankCommissionPercent: costCatalog.settings.bankCommissionPercent,
+            rentPercent: costCatalog.settings.rentPercent
         }
         : AdminStorage.defaults.calculatorConfig;
 

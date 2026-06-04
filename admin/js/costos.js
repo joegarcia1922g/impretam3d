@@ -30,7 +30,14 @@ function readSettings() {
         maintenanceCostPerHour: numericValue('maintenanceCostPerHour'),
         defaultMarginPercent: numericValue('defaultMarginPercent'),
         ivaPercent: numericValue('ivaPercent'),
-        includeIva: document.getElementById('includeIva').checked
+        includeIva: document.getElementById('includeIva').checked,
+        bankCommissionPercent: numericValue('bankCommissionPercent'),
+        rentPercent: numericValue('rentPercent'),
+        cardCostPerPiece: numericValue('cardCostPerPiece'),
+        ringCostPerPiece: numericValue('ringCostPerPiece'),
+        bagCostPerPiece: numericValue('bagCostPerPiece'),
+        eyeletCostPerPiece: numericValue('eyeletCostPerPiece'),
+        magnetCostPerPiece: numericValue('magnetCostPerPiece')
     };
 }
 
@@ -41,6 +48,13 @@ function applySettings(settings) {
     setValue('maintenanceCostPerHour', settings.maintenanceCostPerHour);
     setValue('defaultMarginPercent', settings.defaultMarginPercent);
     setValue('ivaPercent', settings.ivaPercent);
+    setValue('bankCommissionPercent', settings.bankCommissionPercent);
+    setValue('rentPercent', settings.rentPercent);
+    setValue('cardCostPerPiece', settings.cardCostPerPiece);
+    setValue('ringCostPerPiece', settings.ringCostPerPiece);
+    setValue('bagCostPerPiece', settings.bagCostPerPiece);
+    setValue('eyeletCostPerPiece', settings.eyeletCostPerPiece);
+    setValue('magnetCostPerPiece', settings.magnetCostPerPiece);
     document.getElementById('includeIva').checked = Boolean(settings.includeIva);
 }
 
@@ -184,6 +198,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             AdminStorage.setStatus(document.getElementById('settingsStatus'), 'Parametros guardados en D1.', 'success');
         } else {
             AdminStorage.setStatus(document.getElementById('settingsStatus'), response.message || 'No se pudieron guardar parametros.', 'error');
+        }
+    });
+
+    document.getElementById('accessoriesForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const response = await AdminStorage.saveCostSettings(readSettings());
+        if (response.ok) {
+            renderCatalog(response.catalog);
+            AdminStorage.setStatus(document.getElementById('accessoriesStatus'), 'Accesorios guardados en D1.', 'success');
+        } else {
+            AdminStorage.setStatus(document.getElementById('accessoriesStatus'), response.message || 'No se pudieron guardar accesorios.', 'error');
         }
     });
 

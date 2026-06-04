@@ -4,14 +4,21 @@
         calculatorConfig: {
             material: 'PLA',
             materialCostPerGram: 0.35,
-            hourlyCost: 35,
-            printCostPerHour: 35,
-            energyCostPerHour: 3,
-            maintenanceCostPerHour: 1.83,
+            hourlyCost: 2.26,
+            printCostPerHour: 0,
+            energyCostPerHour: 0.5,
+            maintenanceCostPerHour: 1.76,
             piecesPerPlate: 1,
-            marginPercent: 30,
-            includeIva: false,
-            ivaPercent: 16
+            marginPercent: 100,
+            includeIva: true,
+            ivaPercent: 16,
+            bankCommissionPercent: 3.5,
+            rentPercent: 5,
+            cardCostPerPiece: 0.33,
+            ringCostPerPiece: 1,
+            bagCostPerPiece: 0.88,
+            eyeletCostPerPiece: 1,
+            magnetCostPerPiece: 0
         },
         siteContent: {
             heroTitle: 'Impresion 3D creativa',

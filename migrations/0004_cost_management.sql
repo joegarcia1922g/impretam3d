@@ -52,21 +52,28 @@ CREATE INDEX IF NOT EXISTS idx_pricing_tiers_active ON pricing_tiers(active, id)
 INSERT OR IGNORE INTO cost_settings (key, value, updated_at)
 VALUES
     ('businessName', 'Impretam 3D', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-    ('printCostPerHour', '35', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-    ('energyCostPerHour', '3', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-    ('maintenanceCostPerHour', '1.83', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-    ('defaultMarginPercent', '225', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-    ('includeIva', 'false', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-    ('ivaPercent', '16', strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
+    ('printCostPerHour', '0', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('energyCostPerHour', '0.50', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('maintenanceCostPerHour', '1.76', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('defaultMarginPercent', '100', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('includeIva', 'true', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('ivaPercent', '16', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('bankCommissionPercent', '3.5', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('rentPercent', '5', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('cardCostPerPiece', '0.33', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('ringCostPerPiece', '1', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('bagCostPerPiece', '0.88', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('eyeletCostPerPiece', '1', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('magnetCostPerPiece', '0', strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
 
 INSERT OR IGNORE INTO cost_materials (name, cost_per_gram, color, notes, active, created_at, updated_at)
 VALUES ('PLA base', 0.40, '', 'Material base importado del cotizador operativo.', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
 
 INSERT OR IGNORE INTO pricing_tiers (code, name, description, min_markup, max_markup, default_markup, active, created_at, updated_at)
 VALUES
-    ('final', 'Cliente final', 'Precio alto al publico final.', 300, 350, 325, 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-    ('frequent', 'Cliente frecuente', 'Cliente recurrente con margen intermedio.', 200, 250, 225, 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-    ('bulk', 'Cliente bulk', 'Volumen alto y margen configurable.', 120, 180, 150, 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
+    ('final', 'Margen Bajo', 'Precio sugerido con 50% de ganancia.', 50, 50, 50, 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('frequent', 'Margen Medio', 'Precio sugerido con 100% de ganancia.', 100, 100, 100, 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    ('bulk', 'Margen Alto', 'Precio sugerido con 250% de ganancia.', 250, 250, 250, 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
 
 INSERT OR IGNORE INTO cost_models (name, material_id, pieces_per_plate, print_hours, print_hours_decimal, grams, sale_estimate, notes, active, created_at, updated_at)
 SELECT 'Alien Nuevo', id, 15, '11:08', 11.1333, 199.09, NULL, 'Modelo semilla importado del cotizador operativo.', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now')

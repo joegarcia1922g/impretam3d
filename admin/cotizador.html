@@ -27,7 +27,7 @@
         <section class="page-title">
             <div>
                 <h1>Cotizador de impresion 3D</h1>
-                <p>Calcula precios sugeridos con material, tiempo, margen e IVA opcional.</p>
+                <p>Calcula lote y pieza con filamento, horas, accesorios, IVA, comision bancaria, renta y margenes.</p>
             </div>
         </section>
 
@@ -97,6 +97,31 @@
                     </label>
 
                     <label class="field">
+                        <span>Tarjeta/pz</span>
+                        <input id="cardCostPerPiece" type="number" min="0" step="0.01">
+                    </label>
+
+                    <label class="field">
+                        <span>Argolla/pz</span>
+                        <input id="ringCostPerPiece" type="number" min="0" step="0.01">
+                    </label>
+
+                    <label class="field">
+                        <span>Bolsa/pz</span>
+                        <input id="bagCostPerPiece" type="number" min="0" step="0.01">
+                    </label>
+
+                    <label class="field">
+                        <span>Armella/pz</span>
+                        <input id="eyeletCostPerPiece" type="number" min="0" step="0.01">
+                    </label>
+
+                    <label class="field">
+                        <span>Iman/pz</span>
+                        <input id="magnetCostPerPiece" type="number" min="0" step="0.01">
+                    </label>
+
+                    <label class="field">
                         <span>Piezas por placa</span>
                         <input id="piecesPerPlate" type="number" min="1" step="1" value="1">
                     </label>
@@ -111,9 +136,19 @@
                         <input id="ivaPercent" type="number" min="0" step="0.01">
                     </label>
 
+                    <label class="field">
+                        <span>Comision bancaria (%)</span>
+                        <input id="bankCommissionPercent" type="number" min="0" step="0.01">
+                    </label>
+
+                    <label class="field">
+                        <span>Renta / overhead (%)</span>
+                        <input id="rentPercent" type="number" min="0" step="0.01">
+                    </label>
+
                     <label class="check-row full">
                         <input id="includeIva" type="checkbox">
-                        <span>Incluir IVA en el precio sugerido</span>
+                        <span>Aplicar IVA al precio sugerido</span>
                     </label>
                 </div>
 
@@ -131,17 +166,31 @@
                     <div class="metric"><span>Impresion</span><strong id="printTotal">$0.00</strong></div>
                     <div class="metric"><span>Luz</span><strong id="energyTotal">$0.00</strong></div>
                     <div class="metric"><span>Mantenimiento</span><strong id="maintenanceTotal">$0.00</strong></div>
+                    <div class="metric"><span>Accesorios</span><strong id="accessoriesTotal">$0.00</strong></div>
                     <div class="metric"><span>Costo por placa</span><strong id="baseSubtotal">$0.00</strong></div>
                     <div class="metric"><span>Costo por pieza</span><strong id="costPerPiece">$0.00</strong></div>
                     <div class="metric"><span>Utilidad</span><strong id="marginAmount">$0.00</strong></div>
                     <div class="metric"><span>IVA</span><strong id="ivaAmount">$0.00</strong></div>
-                    <div class="metric final"><span>Total</span><strong id="finalPrice">$0.00</strong></div>
+                    <div class="metric"><span>Comision</span><strong id="bankCommissionAmount">$0.00</strong></div>
+                    <div class="metric"><span>Renta</span><strong id="rentAmount">$0.00</strong></div>
+                    <div class="metric"><span>Precio final/pz</span><strong id="finalPricePerPiece">$0.00</strong></div>
+                    <div class="metric final"><span>Total lote</span><strong id="finalPrice">$0.00</strong></div>
                 </div>
                 <div class="actions">
                     <button class="button primary" id="saveQuote" type="button">Guardar cotizacion</button>
                     <button class="button accent" id="copyQuote" type="button">Copiar cotizacion</button>
                 </div>
             </aside>
+
+            <section class="panel">
+                <div class="page-title compact">
+                    <div>
+                        <h2>Precios sugeridos</h2>
+                        <p>Resumen por margen con IVA, comision bancaria y renta.</p>
+                    </div>
+                </div>
+                <div id="pricingSuggestions" class="pricing-suggestions"></div>
+            </section>
 
             <section class="panel">
                 <div class="page-title">

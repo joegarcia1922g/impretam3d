@@ -232,6 +232,26 @@ export async function ensureAdminSchema(db) {
     await ensureColumn(db, 'quotes', 'cost_per_piece', 'REAL NOT NULL DEFAULT 0');
     await ensureColumn(db, 'quotes', 'pieces_per_plate', 'INTEGER NOT NULL DEFAULT 1');
     await ensureColumn(db, 'quotes', 'pricing_tier_code', "TEXT NOT NULL DEFAULT ''");
+    await ensureColumn(db, 'quotes', 'card_cost_per_piece', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'ring_cost_per_piece', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'bag_cost_per_piece', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'eyelet_cost_per_piece', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'magnet_cost_per_piece', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'card_total', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'ring_total', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'bag_total', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'eyelet_total', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'magnet_total', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'accessories_total', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'bank_commission_percent', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'rent_percent', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'price_before_adjustments', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'price_with_iva', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'bank_commission_amount', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'price_with_commission', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'rent_amount', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'final_price_per_piece', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'pricing_suggestions_json', "TEXT NOT NULL DEFAULT '[]'");
 
     schemaReady = true;
 }

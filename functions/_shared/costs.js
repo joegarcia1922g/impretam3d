@@ -2,12 +2,19 @@ import { nowIso, toBooleanInteger, toNumber } from './admin-db.js';
 
 export const DEFAULT_COST_SETTINGS = {
     businessName: 'Impretam 3D',
-    printCostPerHour: 35,
-    energyCostPerHour: 3,
-    maintenanceCostPerHour: 1.83,
-    defaultMarginPercent: 225,
-    includeIva: false,
-    ivaPercent: 16
+    printCostPerHour: 0,
+    energyCostPerHour: 0.50,
+    maintenanceCostPerHour: 1.76,
+    defaultMarginPercent: 100,
+    includeIva: true,
+    ivaPercent: 16,
+    bankCommissionPercent: 3.5,
+    rentPercent: 5,
+    cardCostPerPiece: 0.33,
+    ringCostPerPiece: 1,
+    bagCostPerPiece: 0.88,
+    eyeletCostPerPiece: 1,
+    magnetCostPerPiece: 0
 };
 
 const DEFAULT_MATERIALS = [
@@ -15,9 +22,9 @@ const DEFAULT_MATERIALS = [
 ];
 
 const DEFAULT_TIERS = [
-    { code: 'final', name: 'Cliente final', description: 'Precio alto al publico final.', minMarkup: 300, maxMarkup: 350, defaultMarkup: 325 },
-    { code: 'frequent', name: 'Cliente frecuente', description: 'Cliente recurrente con margen intermedio.', minMarkup: 200, maxMarkup: 250, defaultMarkup: 225 },
-    { code: 'bulk', name: 'Cliente bulk', description: 'Volumen alto y margen configurable.', minMarkup: 120, maxMarkup: 180, defaultMarkup: 150 }
+    { code: 'final', name: 'Margen Bajo', description: 'Precio sugerido con 50% de ganancia.', minMarkup: 50, maxMarkup: 50, defaultMarkup: 50 },
+    { code: 'frequent', name: 'Margen Medio', description: 'Precio sugerido con 100% de ganancia.', minMarkup: 100, maxMarkup: 100, defaultMarkup: 100 },
+    { code: 'bulk', name: 'Margen Alto', description: 'Precio sugerido con 250% de ganancia.', minMarkup: 250, maxMarkup: 250, defaultMarkup: 250 }
 ];
 
 const DEFAULT_MODELS = [
@@ -77,7 +84,14 @@ export function normalizeCostSettings(input = {}) {
         maintenanceCostPerHour: roundMoney(input.maintenanceCostPerHour),
         defaultMarginPercent: roundMoney(input.defaultMarginPercent),
         includeIva: Boolean(input.includeIva),
-        ivaPercent: roundMoney(input.ivaPercent)
+        ivaPercent: roundMoney(input.ivaPercent),
+        bankCommissionPercent: roundMoney(input.bankCommissionPercent),
+        rentPercent: roundMoney(input.rentPercent),
+        cardCostPerPiece: roundMoney(input.cardCostPerPiece),
+        ringCostPerPiece: roundMoney(input.ringCostPerPiece),
+        bagCostPerPiece: roundMoney(input.bagCostPerPiece),
+        eyeletCostPerPiece: roundMoney(input.eyeletCostPerPiece),
+        magnetCostPerPiece: roundMoney(input.magnetCostPerPiece)
     };
 }
 
@@ -122,13 +136,33 @@ export function normalizeTier(input = {}) {
     };
 }
 
-export function calculateCostBreakdown({ hours, grams, materialCostPerGram, printCostPerHour, energyCostPerHour, maintenanceCostPerHour, piecesPerPlate = 1, saleEstimate = null }) {
+export function calculateCostBreakdown({
+    hours,
+    grams,
+    materialCostPerGram,
+    printCostPerHour,
+    energyCostPerHour,
+    maintenanceCostPerHour,
+    piecesPerPlate = 1,
+    saleEstimate = null,
+    cardCostPerPiece = 0,
+    ringCostPerPiece = 0,
+    bagCostPerPiece = 0,
+    eyeletCostPerPiece = 0,
+    magnetCostPerPiece = 0
+}) {
     const pieces = Math.max(Number.parseInt(piecesPerPlate, 10) || 1, 1);
     const materialTotal = roundMoney(toNumber(grams) * toNumber(materialCostPerGram));
     const printTotal = roundMoney(toNumber(hours) * toNumber(printCostPerHour));
     const energyTotal = roundMoney(toNumber(hours) * toNumber(energyCostPerHour));
     const maintenanceTotal = roundMoney(toNumber(hours) * toNumber(maintenanceCostPerHour));
-    const costPlate = roundMoney(materialTotal + printTotal + energyTotal + maintenanceTotal);
+    const cardTotal = roundMoney(pieces * toNumber(cardCostPerPiece));
+    const ringTotal = roundMoney(pieces * toNumber(ringCostPerPiece));
+    const bagTotal = roundMoney(pieces * toNumber(bagCostPerPiece));
+    const eyeletTotal = roundMoney(pieces * toNumber(eyeletCostPerPiece));
+    const magnetTotal = roundMoney(pieces * toNumber(magnetCostPerPiece));
+    const accessoriesTotal = roundMoney(cardTotal + ringTotal + bagTotal + eyeletTotal + magnetTotal);
+    const costPlate = roundMoney(materialTotal + printTotal + energyTotal + maintenanceTotal + accessoriesTotal);
     const costUnit = roundMoney(costPlate / pieces);
     const profit = saleEstimate === null || saleEstimate === undefined || saleEstimate === ''
         ? null
@@ -139,6 +173,12 @@ export function calculateCostBreakdown({ hours, grams, materialCostPerGram, prin
         printTotal,
         energyTotal,
         maintenanceTotal,
+        cardTotal,
+        ringTotal,
+        bagTotal,
+        eyeletTotal,
+        magnetTotal,
+        accessoriesTotal,
         costPlate,
         costUnit,
         profit
@@ -269,6 +309,11 @@ export function rowToModel(row, settings) {
         printCostPerHour: settings.printCostPerHour,
         energyCostPerHour: settings.energyCostPerHour,
         maintenanceCostPerHour: settings.maintenanceCostPerHour,
+        cardCostPerPiece: settings.cardCostPerPiece,
+        ringCostPerPiece: settings.ringCostPerPiece,
+        bagCostPerPiece: settings.bagCostPerPiece,
+        eyeletCostPerPiece: settings.eyeletCostPerPiece,
+        magnetCostPerPiece: settings.magnetCostPerPiece,
         piecesPerPlate: row.pieces_per_plate,
         saleEstimate: row.sale_estimate
     });
