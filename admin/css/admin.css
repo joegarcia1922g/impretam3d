@@ -199,6 +199,11 @@ a {
     gap: 16px;
 }
 
+.form-grid.compact-form {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: end;
+}
+
 .field {
     display: flex;
     flex-direction: column;
@@ -456,6 +461,70 @@ textarea:focus {
     justify-content: flex-end;
 }
 
+.compact-top {
+    margin-top: 16px;
+}
+
+.page-title.compact {
+    margin-bottom: 14px;
+}
+
+.data-list {
+    display: grid;
+    gap: 12px;
+}
+
+.data-row {
+    display: grid;
+    gap: 10px;
+    align-items: end;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface-soft);
+}
+
+.editable-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+}
+
+.editable-row.material-edit {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) auto auto;
+}
+
+.editable-row.model-edit {
+    grid-template-columns: minmax(180px, 1.2fr) repeat(5, minmax(92px, 1fr)) minmax(160px, 1fr);
+}
+
+.editable-row.tier-edit {
+    grid-template-columns: minmax(160px, 1fr) repeat(3, minmax(90px, 0.7fr)) minmax(180px, 1.2fr) auto auto;
+}
+
+.editable-row label,
+.data-row label {
+    display: grid;
+    gap: 5px;
+}
+
+.editable-row label span,
+.data-row label span {
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+.inline-check {
+    align-self: center;
+    min-height: 42px;
+}
+
+.cost-breakdown {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    color: var(--muted);
+    font-size: 0.84rem;
+}
+
 .quote-history {
     display: grid;
     gap: 10px;
@@ -511,6 +580,14 @@ textarea:focus {
     }
 
     .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid.compact-form,
+    .editable-row,
+    .editable-row.material-edit,
+    .editable-row.model-edit,
+    .editable-row.tier-edit {
         grid-template-columns: 1fr;
     }
 

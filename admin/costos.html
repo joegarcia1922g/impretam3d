@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Costos - Impretam 3D</title>
+    <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+    <header class="admin-header">
+        <a class="brand" href="/admin/">
+            Impretam 3D
+            <span>Admin interno</span>
+        </a>
+        <nav class="admin-nav" aria-label="Admin">
+            <a href="/admin/">Panel</a>
+            <a href="/admin/cotizador.html">Cotizador</a>
+            <a class="active" href="/admin/costos.html">Costos</a>
+            <a href="/admin/editor.html">Editor web</a>
+            <a href="/admin/archivos.html">Archivos</a>
+            <a href="/">Sitio publico</a>
+        </nav>
+    </header>
+
+    <main class="admin-shell">
+        <section class="page-title">
+            <div>
+                <h1>Costos operativos</h1>
+                <p>Configura material, impresion, luz, mantenimiento, piezas por placa y margenes para cotizar con datos reales.</p>
+            </div>
+            <button class="button" id="refreshCosts" type="button">Actualizar</button>
+        </section>
+
+        <section class="grid">
+            <form class="panel half" id="settingsForm">
+                <h2>Parametros base</h2>
+                <div class="form-grid">
+                    <label class="field full">
+                        <span>Nombre del negocio</span>
+                        <input id="businessName" type="text">
+                    </label>
+                    <label class="field">
+                        <span>Costo de impresion por hora</span>
+                        <input id="printCostPerHour" type="number" min="0" step="0.01">
+                    </label>
+                    <label class="field">
+                        <span>Costo de luz por hora</span>
+                        <input id="energyCostPerHour" type="number" min="0" step="0.01">
+                    </label>
+                    <label class="field">
+                        <span>Mantenimiento por hora</span>
+                        <input id="maintenanceCostPerHour" type="number" min="0" step="0.01">
+                    </label>
+                    <label class="field">
+                        <span>Margen base (%)</span>
+                        <input id="defaultMarginPercent" type="number" min="0" step="0.01">
+                    </label>
+                    <label class="field">
+                        <span>IVA (%)</span>
+                        <input id="ivaPercent" type="number" min="0" step="0.01">
+                    </label>
+                    <label class="check-row">
+                        <input id="includeIva" type="checkbox">
+                        <span>Incluir IVA por default</span>
+                    </label>
+                </div>
+                <div class="actions">
+                    <button class="button primary" type="submit">Guardar parametros</button>
+                </div>
+                <div id="settingsStatus" class="status"></div>
+            </form>
+
+            <aside class="panel half">
+                <h2>Resumen de costos</h2>
+                <ul class="summary-list">
+                    <li><span>Materiales activos</span><strong id="materialCount">-</strong></li>
+                    <li><span>Modelos activos</span><strong id="modelCount">-</strong></li>
+                    <li><span>Costo promedio pieza</span><strong id="averageUnitCost">-</strong></li>
+                    <li><span>Costo total placas</span><strong id="totalPlateCost">-</strong></li>
+                </ul>
+                <div id="catalogStatus" class="status"></div>
+            </aside>
+
+            <section class="panel">
+                <div class="page-title compact">
+                    <div>
+                        <h2>Materiales</h2>
+                    </div>
+                </div>
+                <form id="materialForm" class="form-grid compact-form">
+                    <label class="field">
+                        <span>Material</span>
+                        <input id="materialName" type="text" required>
+                    </label>
+                    <label class="field">
+                        <span>Costo por gramo</span>
+                        <input id="materialCostPerGram" type="number" min="0" step="0.01" required>
+                    </label>
+                    <label class="field">
+                        <span>Color</span>
+                        <input id="materialColor" type="text">
+                    </label>
+                    <label class="field">
+                        <span>Notas</span>
+                        <input id="materialNotes" type="text">
+                    </label>
+                    <div class="actions field full">
+                        <button class="button primary" type="submit">Agregar material</button>
+                    </div>
+                </form>
+                <div id="materialsList" class="data-list compact-top"></div>
+            </section>
+
+            <section class="panel">
+                <div class="page-title compact">
+                    <div>
+                        <h2>Modelos y placas</h2>
+                    </div>
+                </div>
+                <form id="modelForm" class="form-grid compact-form">
+                    <label class="field">
+                        <span>Modelo</span>
+                        <input id="modelName" type="text" required>
+                    </label>
+                    <label class="field">
+                        <span>Material</span>
+                        <select id="modelMaterialId" required></select>
+                    </label>
+                    <label class="field">
+                        <span>Piezas por placa</span>
+                        <input id="modelPiecesPerPlate" type="number" min="1" step="1" value="1" required>
+                    </label>
+                    <label class="field">
+                        <span>Horas de impresion</span>
+                        <input id="modelPrintHours" type="text" placeholder="11:08" required>
+                    </label>
+                    <label class="field">
+                        <span>Gramos</span>
+                        <input id="modelGrams" type="number" min="0" step="0.01" required>
+                    </label>
+                    <label class="field">
+                        <span>Venta estimada por pieza</span>
+                        <input id="modelSaleEstimate" type="number" min="0" step="0.01">
+                    </label>
+                    <label class="field full">
+                        <span>Notas</span>
+                        <input id="modelNotes" type="text">
+                    </label>
+                    <div class="actions field full">
+                        <button class="button primary" type="submit">Agregar modelo</button>
+                    </div>
+                </form>
+                <div id="modelsList" class="data-list compact-top"></div>
+            </section>
+
+            <section class="panel">
+                <div class="page-title compact">
+                    <div>
+                        <h2>Tiers y margenes</h2>
+                    </div>
+                </div>
+                <div id="tiersList" class="data-list"></div>
+            </section>
+        </section>
+    </main>
+
+    <script src="/admin/js/admin-api.js"></script>
+    <script src="/admin/js/costos.js"></script>
+</body>
+</html>

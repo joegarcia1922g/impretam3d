@@ -5,6 +5,10 @@
             material: 'PLA',
             materialCostPerGram: 0.35,
             hourlyCost: 35,
+            printCostPerHour: 35,
+            energyCostPerHour: 3,
+            maintenanceCostPerHour: 1.83,
+            piecesPerPlate: 1,
             marginPercent: 30,
             includeIva: false,
             ivaPercent: 16
@@ -328,6 +332,70 @@
         });
     }
 
+    function getCostCatalog() {
+        return apiRequest('/admin/api/costs');
+    }
+
+    function saveCostSettings(settings) {
+        return apiRequest('/admin/api/costs/settings', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ settings })
+        });
+    }
+
+    function createMaterial(material) {
+        return apiRequest('/admin/api/costs/materials', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(material)
+        });
+    }
+
+    function updateMaterial(id, material) {
+        return apiRequest(`/admin/api/costs/materials/${encodeURIComponent(id)}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(material)
+        });
+    }
+
+    function createModel(model) {
+        return apiRequest('/admin/api/costs/models', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(model)
+        });
+    }
+
+    function updateModel(id, model) {
+        return apiRequest(`/admin/api/costs/models/${encodeURIComponent(id)}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(model)
+        });
+    }
+
+    function updateTier(id, tier) {
+        return apiRequest(`/admin/api/costs/tiers/${encodeURIComponent(id)}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tier)
+        });
+    }
+
     function money(value) {
         return new Intl.NumberFormat('es-MX', {
             style: 'currency',
@@ -367,6 +435,13 @@
         prepareUpload,
         completeUpload,
         deleteFile,
+        getCostCatalog,
+        saveCostSettings,
+        createMaterial,
+        updateMaterial,
+        createModel,
+        updateModel,
+        updateTier,
         money,
         formatBytes,
         setStatus

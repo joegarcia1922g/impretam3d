@@ -10,6 +10,7 @@ export const STORAGE_LIMITS = {
 };
 
 let schemaReady = false;
+const SAFE_IDENTIFIER = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
 
 export function jsonResponse(body, status = 200) {
     return new Response(JSON.stringify(body), {
@@ -147,6 +148,48 @@ export async function ensureAdminSchema(db) {
             created_at TEXT NOT NULL,
             updated_at TEXT NOT NULL
         )`,
+        `CREATE TABLE IF NOT EXISTS cost_settings (
+            key TEXT PRIMARY KEY,
+            value TEXT NOT NULL,
+            updated_at TEXT NOT NULL
+        )`,
+        `CREATE TABLE IF NOT EXISTS cost_materials (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE,
+            cost_per_gram REAL NOT NULL DEFAULT 0,
+            color TEXT NOT NULL DEFAULT '',
+            notes TEXT NOT NULL DEFAULT '',
+            active INTEGER NOT NULL DEFAULT 1,
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL
+        )`,
+        `CREATE TABLE IF NOT EXISTS cost_models (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE,
+            material_id INTEGER NOT NULL,
+            pieces_per_plate INTEGER NOT NULL DEFAULT 1,
+            print_hours TEXT NOT NULL DEFAULT '0:00',
+            print_hours_decimal REAL NOT NULL DEFAULT 0,
+            grams REAL NOT NULL DEFAULT 0,
+            sale_estimate REAL,
+            notes TEXT NOT NULL DEFAULT '',
+            active INTEGER NOT NULL DEFAULT 1,
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            FOREIGN KEY (material_id) REFERENCES cost_materials(id)
+        )`,
+        `CREATE TABLE IF NOT EXISTS pricing_tiers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            code TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            description TEXT NOT NULL DEFAULT '',
+            min_markup REAL NOT NULL DEFAULT 0,
+            max_markup REAL NOT NULL DEFAULT 0,
+            default_markup REAL NOT NULL DEFAULT 0,
+            active INTEGER NOT NULL DEFAULT 1,
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL
+        )`,
         'CREATE INDEX IF NOT EXISTS idx_quotes_created_at ON quotes(created_at DESC)',
         'CREATE INDEX IF NOT EXISTS idx_quotes_customer_name ON quotes(customer_name)',
         'CREATE INDEX IF NOT EXISTS idx_services_sort_order ON services(sort_order, id)',
@@ -155,7 +198,11 @@ export async function ensureAdminSchema(db) {
         'CREATE INDEX IF NOT EXISTS idx_file_links_file_object_id ON file_links(file_object_id)',
         'CREATE INDEX IF NOT EXISTS idx_file_links_related ON file_links(related_type, related_id)',
         'CREATE UNIQUE INDEX IF NOT EXISTS idx_file_links_unique ON file_links(file_object_id, related_type, related_id, label)',
-        'CREATE INDEX IF NOT EXISTS idx_storage_alerts_month ON storage_alerts(month_key, threshold)'
+        'CREATE INDEX IF NOT EXISTS idx_storage_alerts_month ON storage_alerts(month_key, threshold)',
+        'CREATE INDEX IF NOT EXISTS idx_cost_materials_active ON cost_materials(active, name)',
+        'CREATE INDEX IF NOT EXISTS idx_cost_models_material_id ON cost_models(material_id)',
+        'CREATE INDEX IF NOT EXISTS idx_cost_models_active ON cost_models(active, name)',
+        'CREATE INDEX IF NOT EXISTS idx_pricing_tiers_active ON pricing_tiers(active, id)'
     ];
 
     for (const statement of statements) {
@@ -175,7 +222,31 @@ export async function ensureAdminSchema(db) {
         timestamp
     ).run();
 
+    await ensureColumn(db, 'quotes', 'print_cost_per_hour', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'energy_cost_per_hour', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'maintenance_cost_per_hour', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'print_total', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'energy_total', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'maintenance_total', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'cost_per_plate', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'cost_per_piece', 'REAL NOT NULL DEFAULT 0');
+    await ensureColumn(db, 'quotes', 'pieces_per_plate', 'INTEGER NOT NULL DEFAULT 1');
+    await ensureColumn(db, 'quotes', 'pricing_tier_code', "TEXT NOT NULL DEFAULT ''");
+
     schemaReady = true;
+}
+
+async function ensureColumn(db, tableName, columnName, columnDefinition) {
+    if (!SAFE_IDENTIFIER.test(tableName) || !SAFE_IDENTIFIER.test(columnName)) {
+        throw new Error('invalid_identifier');
+    }
+
+    const rows = await db.prepare(`PRAGMA table_info(${tableName})`).all();
+    const exists = (rows.results || []).some((row) => row.name === columnName);
+
+    if (!exists) {
+        await db.prepare(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnDefinition}`).run();
+    }
 }
 
 export function parseJson(value, fallbackValue = null) {
