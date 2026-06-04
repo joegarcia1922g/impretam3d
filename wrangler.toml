@@ -1,14 +1,7 @@
 # Updated configuration for Cloudflare Pages
+name = "impretam3d"
 pages_build_output_dir = "./"
 compatibility_date = "2025-05-29"
-
-[env.development]
-name = "impretam3d-dev"
-workers_dev = true
-
-[env.production]
-name = "impretam3d"
-workers_dev = false
 
 [[d1_databases]]
 binding = "DB"
