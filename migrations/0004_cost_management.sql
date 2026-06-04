@@ -77,3 +77,13 @@ INSERT OR IGNORE INTO cost_models (name, material_id, pieces_per_plate, print_ho
 SELECT 'Ring de valla', id, 1, '2:10', 2.1667, 39.68, 47.41, 'Modelo semilla importado del cotizador operativo.', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
 FROM cost_materials
 WHERE name = 'PLA base';
+
+INSERT OR IGNORE INTO cost_models (name, material_id, pieces_per_plate, print_hours, print_hours_decimal, grams, sale_estimate, notes, active, created_at, updated_at)
+SELECT 'Motor fuera de borda 1 - TuonixDIY', id, 1, '7:41', 7.6833, 194.61, 206.92, 'Modelo semilla importado del cotizador operativo.', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+FROM cost_materials
+WHERE name = 'PLA base';
+
+INSERT OR IGNORE INTO cost_models (name, material_id, pieces_per_plate, print_hours, print_hours_decimal, grams, sale_estimate, notes, active, created_at, updated_at)
+SELECT 'Motor fuera de borda 2 - ultimaker3dprint', id, 1, '6:15', 6.25, 128.50, 146.86, 'Modelo semilla importado del cotizador operativo.', 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+FROM cost_materials
+WHERE name = 'PLA base';
