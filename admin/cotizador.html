@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Cotizador - Impretam 3D</title>
+    <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+    <header class="admin-header">
+        <a class="brand" href="/admin/">
+            Impretam 3D
+            <span>Admin interno</span>
+        </a>
+        <nav class="admin-nav" aria-label="Admin">
+            <a href="/admin/">Panel</a>
+            <a class="active" href="/admin/cotizador.html">Cotizador</a>
+            <a href="/admin/editor.html">Editor web</a>
+            <a href="/admin/archivos.html">Archivos</a>
+            <a href="/">Sitio publico</a>
+        </nav>
+    </header>
+
+    <main class="admin-shell">
+        <section class="page-title">
+            <div>
+                <h1>Cotizador de impresion 3D</h1>
+                <p>Calcula precios sugeridos con material, tiempo, margen e IVA opcional.</p>
+            </div>
+        </section>
+
+        <section class="grid">
+            <form class="panel half" id="quoteForm">
+                <h2>Datos de cotizacion</h2>
+                <div class="form-grid">
+                    <label class="field full">
+                        <span>Nombre del cliente</span>
+                        <input id="customerName" type="text" autocomplete="off">
+                    </label>
+
+                    <label class="field">
+                        <span>Material</span>
+                        <select id="material">
+                            <option value="PLA">PLA</option>
+                            <option value="PETG">PETG</option>
+                            <option value="ABS">ABS</option>
+                            <option value="TPU">TPU</option>
+                            <option value="Resina">Resina</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </label>
+
+                    <label class="field">
+                        <span>Gramos de filamento/resina</span>
+                        <input id="grams" type="number" min="0" step="0.01" value="0">
+                    </label>
+
+                    <label class="field">
+                        <span>Horas de impresion</span>
+                        <input id="hours" type="number" min="0" step="0.01" value="0">
+                    </label>
+
+                    <label class="field">
+                        <span>Costo de material por gramo</span>
+                        <input id="materialCostPerGram" type="number" min="0" step="0.01">
+                    </label>
+
+                    <label class="field">
+                        <span>Costo por hora</span>
+                        <input id="hourlyCost" type="number" min="0" step="0.01">
+                    </label>
+
+                    <label class="field">
+                        <span>Margen de utilidad (%)</span>
+                        <input id="marginPercent" type="number" min="0" step="0.01">
+                    </label>
+
+                    <label class="field">
+                        <span>IVA (%)</span>
+                        <input id="ivaPercent" type="number" min="0" step="0.01">
+                    </label>
+
+                    <label class="check-row full">
+                        <input id="includeIva" type="checkbox">
+                        <span>Incluir IVA en el precio sugerido</span>
+                    </label>
+                </div>
+
+                <div class="actions">
+                    <button class="button primary" id="saveCalculatorConfig" type="button">Guardar configuracion</button>
+                    <button class="button" id="clearQuote" type="button">Limpiar</button>
+                </div>
+                <div id="calculatorStatus" class="status"></div>
+            </form>
+
+            <aside class="panel half">
+                <h2>Precio sugerido</h2>
+                <div class="quote-total">
+                    <div class="metric"><span>Material</span><strong id="materialTotal">$0.00</strong></div>
+                    <div class="metric"><span>Tiempo de impresion</span><strong id="timeTotal">$0.00</strong></div>
+                    <div class="metric"><span>Subtotal base</span><strong id="baseSubtotal">$0.00</strong></div>
+                    <div class="metric"><span>Utilidad</span><strong id="marginAmount">$0.00</strong></div>
+                    <div class="metric"><span>IVA</span><strong id="ivaAmount">$0.00</strong></div>
+                    <div class="metric final"><span>Total</span><strong id="finalPrice">$0.00</strong></div>
+                </div>
+                <div class="actions">
+                    <button class="button primary" id="saveQuote" type="button">Guardar cotizacion</button>
+                    <button class="button accent" id="copyQuote" type="button">Copiar cotizacion</button>
+                </div>
+            </aside>
+
+            <section class="panel">
+                <div class="page-title">
+                    <div>
+                        <h2>Historial de cotizaciones</h2>
+                        <p>Ultimas cotizaciones guardadas en D1.</p>
+                    </div>
+                </div>
+                <div id="quoteHistory" class="quote-history"></div>
+                <div id="quoteHistoryStatus" class="status"></div>
+            </section>
+        </section>
+    </main>
+
+    <script src="/admin/js/admin-api.js"></script>
+    <script src="/admin/js/cotizador.js"></script>
+</body>
+</html>

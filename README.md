@@ -5,6 +5,8 @@ This is a simple starter website for Impretam 3D. The navigation menu is empty s
 ## How to use
 - Open `index.html` in your browser to view the site.
 - Edit the navigation links and product details in `index.html` as needed.
+- Admin setup for Cloudflare Pages is documented in `docs/cloudflare-admin.md`.
+- R2 storage cost control is documented in `docs/r2-storage-cost-control.md`.
 
 ## Customization
 - Replace the placeholder image and product information with your own content.

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Archivos - Impretam 3D</title>
+    <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+    <header class="admin-header">
+        <a class="brand" href="/admin/">
+            Impretam 3D
+            <span>Admin interno</span>
+        </a>
+        <nav class="admin-nav" aria-label="Admin">
+            <a href="/admin/">Panel</a>
+            <a href="/admin/cotizador.html">Cotizador</a>
+            <a href="/admin/editor.html">Editor web</a>
+            <a class="active" href="/admin/archivos.html">Archivos</a>
+            <a href="/">Sitio publico</a>
+        </nav>
+    </header>
+
+    <main class="admin-shell">
+        <section class="page-title">
+            <div>
+                <h1>Storage R2</h1>
+                <p>Control de archivos, deduplicacion y limites preventivos para Impretam 3D.</p>
+            </div>
+            <button class="button" id="refreshStorage" type="button">Actualizar</button>
+        </section>
+
+        <section class="grid">
+            <article class="panel half storage-panel">
+                <h2>Uso del bucket</h2>
+                <div class="storage-meter" aria-label="Uso de storage">
+                    <span id="storageMeterFill"></span>
+                </div>
+                <ul class="summary-list storage-summary">
+                    <li><span>Usado</span><strong id="storageUsed">-</strong></li>
+                    <li><span>Disponible</span><strong id="storageRemaining">-</strong></li>
+                    <li><span>Archivos fisicos</span><strong id="storageFiles">-</strong></li>
+                    <li><span>Duplicados evitados</span><strong id="storageDuplicates">-</strong></li>
+                    <li><span>Subidas del mes</span><strong id="storageUploads">-</strong></li>
+                    <li><span>Estado</span><strong id="storageState">-</strong></li>
+                </ul>
+                <div class="actions">
+                    <button class="button" id="recalculateStorage" type="button">Recalcular uso</button>
+                </div>
+                <div id="storageStatus" class="status"></div>
+            </article>
+
+            <form class="panel half" id="uploadForm">
+                <h2>Nuevo archivo</h2>
+                <div class="form-grid">
+                    <label class="field full">
+                        <span>Archivo</span>
+                        <input id="fileInput" type="file" accept=".jpg,.jpeg,.png,.webp,.gif,.pdf,.stl,.obj,.3mf,.zip,.step,.stp,.doc,.docx,.xls,.xlsx,.txt,.csv">
+                    </label>
+                    <label class="field">
+                        <span>Relacion</span>
+                        <select id="relatedType">
+                            <option value="general">General</option>
+                            <option value="quote">Cotizacion</option>
+                            <option value="order">Pedido</option>
+                            <option value="customer">Cliente</option>
+                        </select>
+                    </label>
+                    <label class="field">
+                        <span>ID relacionado</span>
+                        <input id="relatedId" type="text" autocomplete="off" placeholder="Opcional">
+                    </label>
+                    <label class="field full">
+                        <span>Etiqueta</span>
+                        <input id="fileLabel" type="text" autocomplete="off" placeholder="STL cliente, render, PDF final">
+                    </label>
+                </div>
+
+                <div class="file-fingerprint">
+                    <span>SHA-256</span>
+                    <strong id="fileHash">Selecciona un archivo</strong>
+                </div>
+
+                <div class="actions">
+                    <button class="button primary" id="uploadButton" type="submit">Subir archivo</button>
+                </div>
+                <div id="uploadStatus" class="status"></div>
+            </form>
+
+            <section class="panel">
+                <div class="page-title compact">
+                    <div>
+                        <h2>Archivos recientes</h2>
+                    </div>
+                </div>
+                <div id="filesList" class="file-list"></div>
+                <div id="filesStatus" class="status"></div>
+            </section>
+        </section>
+    </main>
+
+    <script src="/admin/js/admin-api.js"></script>
+    <script src="/admin/js/files.js"></script>
+</body>
+</html>

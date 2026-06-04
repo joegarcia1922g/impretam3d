@@ -1,4 +1,6 @@
 User-agent: *
+Disallow: /admin/
+Disallow: /api/admin/
 Disallow: /dashboard-i3d/
 Disallow: /js/admin-*
 Disallow: /*.bak$

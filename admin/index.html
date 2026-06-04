@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin - Impretam 3D</title>
+    <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+    <header class="admin-header">
+        <a class="brand" href="/admin/">
+            Impretam 3D
+            <span>Admin interno</span>
+        </a>
+        <nav class="admin-nav" aria-label="Admin">
+            <a class="active" href="/admin/">Panel</a>
+            <a href="/admin/cotizador.html">Cotizador</a>
+            <a href="/admin/editor.html">Editor web</a>
+            <a href="/admin/archivos.html">Archivos</a>
+            <a href="/">Sitio publico</a>
+        </nav>
+    </header>
+
+    <main class="admin-shell">
+        <section class="page-title">
+            <div>
+                <h1>Panel interno</h1>
+                <p>Operaciones base para cotizar, ajustar contenido y preparar datos internos sin credenciales en el frontend.</p>
+            </div>
+        </section>
+
+        <section class="grid">
+            <article class="panel quarter">
+                <h2>Cotizador</h2>
+                <ul class="summary-list">
+                    <li><span>Material base</span><strong id="defaultMaterial">-</strong></li>
+                    <li><span>Margen base</span><strong id="defaultMargin">-</strong></li>
+                </ul>
+                <div class="actions">
+                    <a class="button primary" href="/admin/cotizador.html">Abrir cotizador</a>
+                </div>
+                <div id="calculatorStatus" class="status"></div>
+            </article>
+
+            <article class="panel quarter">
+                <h2>Editor web</h2>
+                <ul class="summary-list">
+                    <li><span>Servicios editables</span><strong id="serviceCount">-</strong></li>
+                    <li><span>Publicacion</span><strong>Manual</strong></li>
+                </ul>
+                <div class="actions">
+                    <a class="button primary" href="/admin/editor.html">Abrir editor</a>
+                </div>
+                <div id="contentStatus" class="status"></div>
+            </article>
+
+            <article class="panel quarter storage-panel">
+                <h2>Storage R2</h2>
+                <div class="storage-meter small" aria-label="Uso de storage">
+                    <span id="dashboardStorageMeterFill"></span>
+                </div>
+                <ul class="summary-list">
+                    <li><span>Usado</span><strong id="dashboardStorageUsed">-</strong></li>
+                    <li><span>Estado</span><strong id="dashboardStorageState">-</strong></li>
+                    <li><span>Duplicados</span><strong id="dashboardStorageDuplicates">-</strong></li>
+                </ul>
+                <div class="actions">
+                    <a class="button primary" href="/admin/archivos.html">Abrir archivos</a>
+                </div>
+                <div id="dashboardStorageStatus" class="status"></div>
+            </article>
+
+            <article class="panel quarter">
+                <h2>Seguridad</h2>
+                <ul class="summary-list">
+                    <li><span>Ruta protegida</span><strong>/admin</strong></li>
+                    <li><span>API privada</span><strong>/admin/api</strong></li>
+                </ul>
+                <div id="securityStatus" class="status"></div>
+            </article>
+        </section>
+    </main>
+
+    <script src="/admin/js/admin-api.js"></script>
+    <script src="/admin/js/dashboard.js"></script>
+</body>
+</html>

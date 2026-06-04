@@ -11,3 +11,12 @@ pages_build_output_dir = "./"
 compatibility_date = "2025-05-29"
 
 main = "index.html"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "impretam3d-db"
+database_id = "11960351-7df3-4aea-a7cb-ecb73691fda3"
+
+[[r2_buckets]]
+binding = "IMP_FILES_BUCKET"
+bucket_name = "impretam3d-files"
