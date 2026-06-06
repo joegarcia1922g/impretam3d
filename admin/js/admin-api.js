@@ -403,6 +403,110 @@
         });
     }
 
+    function getCrmDashboard() {
+        return apiRequest('/admin/api/crm');
+    }
+
+    function listCrmContacts(params = {}) {
+        const query = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+            if (value !== undefined && value !== null && value !== '') {
+                query.set(key, value);
+            }
+        });
+        const suffix = query.toString() ? `?${query.toString()}` : '';
+        return apiRequest(`/admin/api/crm/contacts${suffix}`);
+    }
+
+    function createCrmContact(contact) {
+        return apiRequest('/admin/api/crm/contacts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(contact)
+        });
+    }
+
+    function updateCrmContact(id, contact) {
+        return apiRequest(`/admin/api/crm/contacts/${encodeURIComponent(id)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(contact)
+        });
+    }
+
+    function listCrmDeals(params = {}) {
+        const query = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+            if (value !== undefined && value !== null && value !== '') {
+                query.set(key, value);
+            }
+        });
+        const suffix = query.toString() ? `?${query.toString()}` : '';
+        return apiRequest(`/admin/api/crm/deals${suffix}`);
+    }
+
+    function createCrmDeal(deal) {
+        return apiRequest('/admin/api/crm/deals', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(deal)
+        });
+    }
+
+    function updateCrmDeal(id, deal) {
+        return apiRequest(`/admin/api/crm/deals/${encodeURIComponent(id)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(deal)
+        });
+    }
+
+    function listCrmTasks(params = {}) {
+        const query = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+            if (value !== undefined && value !== null && value !== '') {
+                query.set(key, value);
+            }
+        });
+        const suffix = query.toString() ? `?${query.toString()}` : '';
+        return apiRequest(`/admin/api/crm/tasks${suffix}`);
+    }
+
+    function createCrmTask(task) {
+        return apiRequest('/admin/api/crm/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(task)
+        });
+    }
+
+    function updateCrmTask(id, task) {
+        return apiRequest(`/admin/api/crm/tasks/${encodeURIComponent(id)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(task)
+        });
+    }
+
+    function listCrmActivities(params = {}) {
+        const query = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+            if (value !== undefined && value !== null && value !== '') {
+                query.set(key, value);
+            }
+        });
+        const suffix = query.toString() ? `?${query.toString()}` : '';
+        return apiRequest(`/admin/api/crm/activities${suffix}`);
+    }
+
+    function createCrmActivity(activity) {
+        return apiRequest('/admin/api/crm/activities', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(activity)
+        });
+    }
+
     function money(value) {
         return new Intl.NumberFormat('es-MX', {
             style: 'currency',
@@ -449,6 +553,18 @@
         createModel,
         updateModel,
         updateTier,
+        getCrmDashboard,
+        listCrmContacts,
+        createCrmContact,
+        updateCrmContact,
+        listCrmDeals,
+        createCrmDeal,
+        updateCrmDeal,
+        listCrmTasks,
+        createCrmTask,
+        updateCrmTask,
+        listCrmActivities,
+        createCrmActivity,
         money,
         formatBytes,
         setStatus

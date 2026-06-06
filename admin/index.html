@@ -15,6 +15,7 @@
         </a>
         <nav class="admin-nav" aria-label="Admin">
             <a class="active" href="/admin/">Panel</a>
+            <a href="/admin/crm.html">CRM</a>
             <a href="/admin/cotizador.html">Cotizador</a>
             <a href="/admin/costos.html">Costos</a>
             <a href="/admin/editor.html">Editor web</a>
@@ -32,6 +33,18 @@
         </section>
 
         <section class="grid">
+            <article class="panel quarter">
+                <h2>CRM</h2>
+                <ul class="summary-list">
+                    <li><span>Oportunidades</span><strong id="crmOpenDeals">-</strong></li>
+                    <li><span>Tareas abiertas</span><strong id="crmOpenTasks">-</strong></li>
+                </ul>
+                <div class="actions">
+                    <a class="button primary" href="/admin/crm.html">Abrir CRM</a>
+                </div>
+                <div id="crmStatus" class="status"></div>
+            </article>
+
             <article class="panel quarter">
                 <h2>Cotizador</h2>
                 <ul class="summary-list">

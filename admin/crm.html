@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>CRM - Impretam 3D</title>
+    <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+    <header class="admin-header">
+        <a class="brand" href="/admin/">
+            Impretam 3D
+            <span>Admin interno</span>
+        </a>
+        <nav class="admin-nav" aria-label="Admin">
+            <a href="/admin/">Panel</a>
+            <a class="active" href="/admin/crm.html">CRM</a>
+            <a href="/admin/cotizador.html">Cotizador</a>
+            <a href="/admin/costos.html">Costos</a>
+            <a href="/admin/editor.html">Editor web</a>
+            <a href="/admin/archivos.html">Archivos</a>
+            <a href="/">Sitio publico</a>
+        </nav>
+    </header>
+
+    <main class="admin-shell wide-shell">
+        <section class="page-title">
+            <div>
+                <h1>CRM operativo</h1>
+                <p>Clientes, oportunidades, tareas, actividad, cotizaciones y ventas en un solo panel.</p>
+            </div>
+            <div class="actions">
+                <button class="button" id="refreshCrm" type="button">Actualizar</button>
+                <a class="button primary" href="/admin/cotizador.html">Nueva cotizacion</a>
+            </div>
+        </section>
+
+        <section class="crm-kpis" aria-label="Metricas CRM">
+            <article class="panel kpi-card">
+                <span>Contactos</span>
+                <strong id="kpiContacts">0</strong>
+                <small id="kpiLeads">0 leads</small>
+            </article>
+            <article class="panel kpi-card">
+                <span>Oportunidades</span>
+                <strong id="kpiDeals">0</strong>
+                <small id="kpiPipeline">$0.00 pipeline</small>
+            </article>
+            <article class="panel kpi-card">
+                <span>Cotizaciones</span>
+                <strong id="kpiQuotes">0</strong>
+                <small id="kpiAccepted">0 aceptadas</small>
+            </article>
+            <article class="panel kpi-card">
+                <span>Tareas abiertas</span>
+                <strong id="kpiTasks">0</strong>
+                <small id="kpiDue">0 vencidas</small>
+            </article>
+            <article class="panel kpi-card">
+                <span>Ventas</span>
+                <strong id="kpiWon">$0.00</strong>
+                <small id="kpiWonCount">0 cierres</small>
+            </article>
+        </section>
+
+        <section class="crm-layout">
+            <section class="panel crm-main">
+                <div class="page-title compact">
+                    <div>
+                        <h2>Pipeline</h2>
+                        <p>Arranque, cotizacion, aceptacion, produccion y cierre.</p>
+                    </div>
+                </div>
+                <div id="pipelineBoard" class="pipeline-board"></div>
+            </section>
+
+            <aside class="panel crm-side">
+                <h2>Nuevo contacto</h2>
+                <form id="contactForm" class="form-grid single-form">
+                    <label class="field full">
+                        <span>Nombre</span>
+                        <input name="name" type="text" required>
+                    </label>
+                    <label class="field">
+                        <span>Empresa</span>
+                        <input name="company" type="text">
+                    </label>
+                    <label class="field">
+                        <span>Telefono</span>
+                        <input name="phone" type="text">
+                    </label>
+                    <label class="field">
+                        <span>Email</span>
+                        <input name="email" type="email">
+                    </label>
+                    <label class="field">
+                        <span>Canal</span>
+                        <select name="channel">
+                            <option value="web">Web</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="referido">Referido</option>
+                        </select>
+                    </label>
+                    <label class="field">
+                        <span>Estado</span>
+                        <select name="status">
+                            <option value="lead">Lead</option>
+                            <option value="active">Activo</option>
+                            <option value="inactive">Inactivo</option>
+                        </select>
+                    </label>
+                    <label class="field full">
+                        <span>Etiquetas</span>
+                        <input name="tags" type="text">
+                    </label>
+                    <label class="field full">
+                        <span>Notas</span>
+                        <textarea name="notes"></textarea>
+                    </label>
+                    <div class="actions field full">
+                        <button class="button primary" type="submit">Guardar contacto</button>
+                    </div>
+                </form>
+                <div id="contactStatus" class="status"></div>
+            </aside>
+        </section>
+
+        <section class="crm-layout">
+            <section class="panel crm-main">
+                <div class="toolbar-row">
+                    <div class="page-title compact">
+                        <div>
+                            <h2>Contactos</h2>
+                            <p>Clientes y prospectos recientes.</p>
+                        </div>
+                    </div>
+                    <div class="filter-row">
+                        <input id="contactSearch" type="search" placeholder="Buscar cliente">
+                        <select id="contactStatusFilter">
+                            <option value="">Todos</option>
+                            <option value="lead">Leads</option>
+                            <option value="active">Activos</option>
+                            <option value="inactive">Inactivos</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="contactList" class="crm-list"></div>
+            </section>
+
+            <aside class="panel crm-side">
+                <h2>Nueva oportunidad</h2>
+                <form id="dealForm" class="form-grid single-form">
+                    <label class="field full">
+                        <span>Titulo</span>
+                        <input name="title" type="text" required>
+                    </label>
+                    <label class="field full">
+                        <span>Contacto</span>
+                        <select name="contactId" id="dealContactSelect"></select>
+                    </label>
+                    <label class="field">
+                        <span>Etapa</span>
+                        <select name="stage" id="dealStageSelect"></select>
+                    </label>
+                    <label class="field">
+                        <span>Valor estimado</span>
+                        <input name="value" type="number" min="0" step="0.01">
+                    </label>
+                    <label class="field">
+                        <span>Probabilidad %</span>
+                        <input name="probability" type="number" min="0" max="100" step="1" value="50">
+                    </label>
+                    <label class="field">
+                        <span>Fecha objetivo</span>
+                        <input name="dueDate" type="date">
+                    </label>
+                    <label class="field">
+                        <span>Prioridad</span>
+                        <select name="priority">
+                            <option value="medium">Media</option>
+                            <option value="high">Alta</option>
+                            <option value="low">Baja</option>
+                        </select>
+                    </label>
+                    <label class="field full">
+                        <span>Notas</span>
+                        <textarea name="notes"></textarea>
+                    </label>
+                    <div class="actions field full">
+                        <button class="button primary" type="submit">Guardar oportunidad</button>
+                    </div>
+                </form>
+                <div id="dealStatus" class="status"></div>
+            </aside>
+        </section>
+
+        <section class="grid">
+            <section class="panel half">
+                <div class="page-title compact">
+                    <div>
+                        <h2>Tareas</h2>
+                        <p>Seguimientos pendientes y vencidos.</p>
+                    </div>
+                </div>
+                <form id="taskForm" class="form-grid compact-form">
+                    <label class="field">
+                        <span>Tarea</span>
+                        <input name="title" type="text" required>
+                    </label>
+                    <label class="field">
+                        <span>Contacto</span>
+                        <select name="contactId" id="taskContactSelect"></select>
+                    </label>
+                    <label class="field">
+                        <span>Oportunidad</span>
+                        <select name="dealId" id="taskDealSelect"></select>
+                    </label>
+                    <label class="field">
+                        <span>Vence</span>
+                        <input name="dueDate" type="date">
+                    </label>
+                    <label class="field">
+                        <span>Prioridad</span>
+                        <select name="priority">
+                            <option value="medium">Media</option>
+                            <option value="high">Alta</option>
+                            <option value="low">Baja</option>
+                        </select>
+                    </label>
+                    <div class="actions field">
+                        <button class="button primary" type="submit">Agregar tarea</button>
+                    </div>
+                </form>
+                <div id="taskStatus" class="status"></div>
+                <div id="taskList" class="crm-list compact-top"></div>
+            </section>
+
+            <section class="panel half">
+                <div class="page-title compact">
+                    <div>
+                        <h2>Actividad</h2>
+                        <p>Notas, llamadas, WhatsApp y eventos comerciales.</p>
+                    </div>
+                </div>
+                <form id="activityForm" class="form-grid compact-form">
+                    <label class="field">
+                        <span>Tipo</span>
+                        <select name="type">
+                            <option value="note">Nota</option>
+                            <option value="call">Llamada</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="email">Email</option>
+                            <option value="meeting">Reunion</option>
+                        </select>
+                    </label>
+                    <label class="field">
+                        <span>Contacto</span>
+                        <select name="contactId" id="activityContactSelect"></select>
+                    </label>
+                    <label class="field">
+                        <span>Oportunidad</span>
+                        <select name="dealId" id="activityDealSelect"></select>
+                    </label>
+                    <label class="field">
+                        <span>Asunto</span>
+                        <input name="subject" type="text" required>
+                    </label>
+                    <label class="field full">
+                        <span>Detalle</span>
+                        <textarea name="body"></textarea>
+                    </label>
+                    <div class="actions field full">
+                        <button class="button primary" type="submit">Registrar actividad</button>
+                    </div>
+                </form>
+                <div id="activityStatus" class="status"></div>
+                <div id="activityList" class="activity-feed compact-top"></div>
+            </section>
+        </section>
+    </main>
+
+    <script src="/admin/js/admin-api.js"></script>
+    <script src="/admin/js/crm.js"></script>
+</body>
+</html>

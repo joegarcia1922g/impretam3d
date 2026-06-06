@@ -3,11 +3,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const dashboardStorageStatus = document.getElementById('dashboardStorageStatus');
     const calculatorStatus = document.getElementById('calculatorStatus');
     const contentStatus = document.getElementById('contentStatus');
+    const crmStatus = document.getElementById('crmStatus');
 
-    const [calculator, content, storage] = await Promise.all([
+    const [calculator, content, storage, crm] = await Promise.all([
         AdminStorage.load('calculatorConfig'),
         AdminStorage.load('siteContent'),
-        AdminStorage.getStorageUsage()
+        AdminStorage.getStorageUsage(),
+        AdminStorage.getCrmDashboard()
     ]);
 
     const serviceCount = Array.isArray(content.value.services) ? content.value.services.length : 0;
@@ -35,6 +37,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             : 'Crea el binding IMPRETAM3D_DB para guardar datos compartidos en Cloudflare D1.',
         calculator.remote && content.remote ? 'success' : 'warning'
     );
+
+    if (crm.ok && crm.dashboard) {
+        document.getElementById('crmOpenDeals').textContent = String(crm.dashboard.stats.openDeals || 0);
+        document.getElementById('crmOpenTasks').textContent = String(crm.dashboard.stats.openTasks || 0);
+        AdminStorage.setStatus(crmStatus, 'CRM sincronizado en D1.', 'success');
+    } else {
+        AdminStorage.setStatus(crmStatus, crm.message || 'CRM pendiente de sincronizar.', 'warning');
+    }
 
     if (storage.ok && storage.usage) {
         const usage = storage.usage;
